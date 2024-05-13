@@ -1,19 +1,17 @@
 import { useState } from "react"
 
 function IndexPopup() {
-  const [data, setData] = useState("")
+  const [data, setData] = useState<string>("")
 
   return (
     <div
       style={{
-        padding: 16
+        padding: 16,
+        width: "357px",
+        height: "600px"
       }}>
       <h2>
-        Welcome to your{" "}
-        <a href="https://www.plasmo.com" target="_blank">
-          Plasmo
-        </a>{" "}
-        Extension!
+        Gm duchuyyy
       </h2>
       <input onChange={(e) => setData(e.target.value)} value={data} />
       <a href="https://docs.plasmo.com" target="_blank">
