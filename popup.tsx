@@ -17,6 +17,7 @@ function IndexPopup() {
       <a href="https://docs.plasmo.com" target="_blank">
         View Docs
       </a>
+      <div>{data}</div>
     </div>
   )
 }
