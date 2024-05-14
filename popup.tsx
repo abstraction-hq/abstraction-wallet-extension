@@ -1,7 +1,14 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+
+import { WalletService } from "./services"
 
 function IndexPopup() {
   const [data, setData] = useState<string>("")
+
+  useEffect(() => {
+    const walletService = new WalletService("")
+    console.log(walletService.getAddress())
+  }, [])
 
   return (
     <div
