@@ -14,7 +14,7 @@ function IndexPopup() {
   return (
     <div
       style={{
-        padding: 16,f
+        padding: 16,
         width: "357px",
         height: "600px"
       }}>
