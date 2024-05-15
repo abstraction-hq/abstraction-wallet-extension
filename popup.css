@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.wallet {
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.user-icon, .notifications-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.username {
+    font-size: 1.2em;
+}
+
+.balance-card {
+    background: linear-gradient(135deg, #32a852, #a8e063);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.balance-title {
+    font-size: 1.2em;
+}
+
+.balance-amount {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.balance-actions button {
+    background-color: #ffffff;
+    color: #121212;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.crypto-list {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.crypto-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #2c2c2c;
+}
+
+.crypto-item:last-child {
+    border-bottom: none;
+}
