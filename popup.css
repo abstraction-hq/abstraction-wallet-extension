@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Satoshi", sans-serif;
     margin: 0;
     padding: 0;
     background-color: #121212;
@@ -7,6 +7,7 @@ body {
 }
 
 .wallet {
+    width: 260px;
     padding: 20px;
 }
 
@@ -27,30 +28,36 @@ body {
 }
 
 .balance-card {
-    background: linear-gradient(135deg, #32a852, #a8e063);
-    border-radius: 12px;
-    padding: 20px;
+    background: linear-gradient(135deg, #D5E584, #5FF395);
+    border-radius: 32px;
+    padding: 10px;
     text-align: center;
     margin: 20px 0;
 }
 
 .balance-title {
     font-size: 1.2em;
+    color: #282C2E;
+    font-weight: bold;
 }
 
 .balance-amount {
-    font-size: 2em;
+    font-size: 2.4em;
     font-weight: bold;
+    color: #282C2E;
     margin: 10px 0;
 }
 
 .balance-actions button {
     background-color: #ffffff;
-    color: #121212;
+    width: 86px;
+    height: 30px;
+    opacity: 30%;
+    color: #096326;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 20px;
     margin: 5px;
-    border-radius: 8px;
+    border-radius: 100px;
     cursor: pointer;
 }
 

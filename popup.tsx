@@ -15,13 +15,13 @@ function IndexPopup() {
   return (
       <div className="wallet">
           <div className="header">
-              <img src="icons/user.png" alt="User Icon" className="user-icon" />
-              <span className="username">Paublo</span>
+              <img src="/assets/images/avatar.png" alt="User Icon" className="user-icon" />
+              <span className="username">Yeelin</span>
               <img src="icons/notifications.png" alt="Notifications" className="notifications-icon" />
           </div>
           <div className="balance-card">
               <p className="balance-title">My balance</p>
-              <p className="balance-amount">$285,410.12</p>
+              <p className="balance-amount">$ 285,410.12</p>
               <div className="balance-actions">
                   <button id="send-btn">Send</button>
                   <button id="receive-btn">Receive</button>
