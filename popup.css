@@ -1,0 +1,158 @@
+body {
+    font-family: "Satoshi", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.wallet {
+    width: 306px;
+    height: 600px;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.user-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #5540EE;
+}
+
+.notifications-icon {
+    width: 20px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.scan-icon {
+    margin-right: 8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+}
+
+.username {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.balance-card {
+    background: linear-gradient(135deg, #D5E584, #5FF395);
+    border-radius: 32px;
+    padding: 10px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.balance-title {
+    font-size: 1.2em;
+    color: #282C2E;
+    font-weight: bold;
+}
+
+.balance-amount {
+    font-size: 2.5em;
+    font-weight: 800;
+    color: #282C2E;
+    margin: 10px 0;
+}
+
+.balance-currency {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #282C2E;
+    margin: 10px 10px 10px 0;
+}
+
+.balance-actions {
+    display: flex;
+    justify-content: center;
+    gap: 5px; /* Add gap between buttons */
+}
+
+.balance-actions button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    width: 96px;
+    height: 30px;
+    opacity: 30%;
+    color: #096326;
+    border: none;
+    padding: 8px 20px;
+    margin: 5px;
+    border-radius: 100px;
+    cursor: pointer;
+}
+
+.balance-actions button img {
+    margin-right: 1px;
+}
+
+.crypto-list {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    padding: 0 10px 0 10px;
+    font-weight: 500;
+    font-size: 1.1em;
+}
+
+.crypto-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #2c2c2c;
+}
+
+.crypto-item:last-child {
+    border-bottom: none;
+}
+
+.crypto-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+
+.crypto-details {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.crypto-name {
+    font-weight: bold;
+}
+
+.crypto-symbol {
+    color: #888888;
+}
+
+.crypto-pricing {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.crypto-amount {
+    font-weight: bold;
+}
+
+.crypto-quantity {
+    color: #888888;
+}
+
+.crypto-info {
+    display: flex;
+    align-items: center;
+}
