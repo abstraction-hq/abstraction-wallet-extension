@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "description": "Helix is account abstraction wallet",
   "author": "imduchuyyy",
+  "type": "module",
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
@@ -12,7 +13,8 @@
   "dependencies": {
     "plasmo": "0.86.2",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-router-dom": "^6.23.1"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",

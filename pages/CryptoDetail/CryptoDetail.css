@@ -1,0 +1,79 @@
+.crypto-detail {
+    padding: 20px;
+    color: #ffffff;
+    background-color: #121212;
+}
+
+.crypto-header {
+    text-align: center;
+}
+
+.crypto-icon-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.crypto-balance {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.crypto-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.crypto-actions button {
+    background-color: #ffffff;
+    color: #121212;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.transaction-list {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #2c2c2c;
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-type {
+    width: 70px;
+    text-align: center;
+}
+
+.transaction-type.send {
+    color: red;
+}
+
+.transaction-type.receive {
+    color: green;
+}
+
+.transaction-details {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.transaction-amount {
+    font-weight: bold;
+}
+
+.transaction-date, .transaction-address {
+    color: #888888;
+}
