@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import './App.css';
+import './CryptoDetail.css';
 
 const cryptoData = {
     USDT: {
@@ -25,7 +25,7 @@ const CryptoDetail = () => {
     return (
         <div className="crypto-detail">
             <div className="crypto-header">
-                <img src={`path/to/${symbol}.png`} alt={crypto.name} className="crypto-icon" />
+                {/*<img src={`icons/${symbol.toLowerCase()}.png`} alt={crypto.name} className="crypto-icon" />*/}
                 <h1>{crypto.name}</h1>
                 <p>{symbol}</p>
             </div>

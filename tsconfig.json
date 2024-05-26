@@ -20,9 +20,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "~*": [
-        "./*"
-      ]
+      "~assets/*": ["assets/*"] // Alias for assets directory
     },
     "baseUrl": ".",
     "lib": ["dom", "es2015", "es2017"],

@@ -1,24 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
-import { Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './popup.css';
 
-import {CryptoDetail} from './pages/CryptoDetail/CryptoDetail';
-import avatar from "./assets/images/avatar.png";
-import notification from "./assets/images/notification.png";
-import scan from "./assets/images/scan.png";
+import CryptoDetail from "~pages/CryptoDetail/CryptoDetail";
 
-//import arrow
-import arrow_up from "./assets/images/arrow_up.png";
-import arrow_down from "./assets/images/arrow_down.png";
-
-//import currency
-import ethereum from "./assets/images/ethereum.png";
-import sushiswap from "./assets/images/sushiswap.png";
-import polygon from "./assets/images/polygon.png";
-import tether from "./assets/images/tether.png";
-import optimism from "./assets/images/optimism.png";
-import pancakeswap from "./assets/images/pancakeswap.png";
+import avatar from './assets/images/avatar.png';
+import scan from './assets/images/scan.png';
+import notification from './assets/images/notification.png';
+import arrow_up from './assets/images/arrow_up.png';
+import arrow_down from './assets/images/arrow_down.png';
+import ethereum from './assets/images/ethereum.png';
+import sushiswap from './assets/images/sushiswap.png';
+import polygon from './assets/images/polygon.png';
+import tether from './assets/images/tether.png';
+import optimism from './assets/images/optimism.png';
+import pancakeswap from './assets/images/pancakeswap.png';
 
 const dataCrypto = [
   {
@@ -86,23 +83,23 @@ const Popup = () => (
                     <img src={arrow_down} alt="Receive" />Receive</button>
             </div>
         </div>
-        <div className="crypto-list">
-            {dataCrypto.map((item, index) => (
-                <Link to={`/crypto/${item.symbol}`} key={index} className="crypto-item">
-                    <div className="crypto-info">
-                        <img src={item.uri} alt={item.name} className="crypto-icon" />
-                        <div className="crypto-details">
-                            <span className="crypto-name">{item.name}</span>
-                            <span className="crypto-symbol">{item.symbol}</span>
-                        </div>
-                    </div>
-                    <div className="crypto-pricing">
-                        <span className="crypto-amount">{item.amount}</span>
-                        <span className="crypto-quantity">{item.quantity}</span>
-                    </div>
-                </Link>
-            ))}
-        </div>
+        {/*<div className="crypto-list">*/}
+        {/*    {dataCrypto.map((item, index) => (*/}
+        {/*        <Link to={`/crypto/${item.symbol}`} key={index} className="crypto-item">*/}
+        {/*            <div className="crypto-info">*/}
+        {/*                <img src={item.uri} alt={item.name} className="crypto-icon" />*/}
+        {/*                <div className="crypto-details">*/}
+        {/*                    <span className="crypto-name">{item.name}</span>*/}
+        {/*                    <span className="crypto-symbol">{item.symbol}</span>*/}
+        {/*                </div>*/}
+        {/*            </div>*/}
+        {/*            <div className="crypto-pricing">*/}
+        {/*                <span className="crypto-amount">{item.amount}</span>*/}
+        {/*                <span className="crypto-quantity">{item.quantity}</span>*/}
+        {/*            </div>*/}
+        {/*        </Link>*/}
+        {/*    ))}*/}
+        {/*</div>*/}
     </div>
 );
 
