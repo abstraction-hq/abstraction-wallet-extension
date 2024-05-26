@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './popup.css';
 
 import {CryptoDetail} from './pages/CryptoDetail/CryptoDetail';
@@ -65,21 +65,7 @@ const dataCrypto = [
   }
 ];
 
-
-const Popup = () => {
-    return (
-        <Router>
-            <div>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/crypto/:symbol" element={<CryptoDetail />} />
-            </Routes>
-            </div>
-        </Router>
-    );
-};
-
-const Home = () => (
+const Popup = () => (
     <div className="wallet">
         <div className="header">
             <img src={avatar} alt="User Icon" className="user-icon" />
@@ -103,7 +89,6 @@ const Home = () => (
         <div className="crypto-list">
             {dataCrypto.map((item, index) => (
                 <Link to={`/crypto/${item.symbol}`} key={index} className="crypto-item">
-
                     <div className="crypto-info">
                         <img src={item.uri} alt={item.name} className="crypto-icon" />
                         <div className="crypto-details">
@@ -121,4 +106,4 @@ const Home = () => (
     </div>
 );
 
-ReactDOM.render(<Popup />, document.getElementById('root'));
+export default Popup;

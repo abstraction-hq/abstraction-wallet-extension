@@ -1,0 +1,154 @@
+/* Example CSS for the components */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.wallet {
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-icon, .notifications-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.username {
+    font-size: 20px;
+}
+
+.balance-card {
+    background-color: #2a2a2a;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.balance-title {
+    font-size: 18px;
+}
+
+.balance-amount {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.balance-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+#send-btn, #receive-btn {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #3a3a3a;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+#send-btn img, #receive-btn img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+.crypto-list {
+    margin-top: 20px;
+}
+
+.crypto-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #2a2a2a;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+}
+
+.crypto-info {
+    display: flex;
+    align-items: center;
+}
+
+.crypto-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+}
+
+.crypto-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.crypto-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.crypto-symbol {
+    font-size: 14px;
+    color: #aaaaaa;
+}
+
+.crypto-pricing {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.crypto-amount {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.crypto-quantity {
+    font-size: 14px;
+    color: #aaaaaa;
+}
+
+.crypto-detail {
+    padding: 20px;
+}
+
+.crypto-header {
+    display: flex;
+    align-items: center;
+}
+
+.crypto-icon {
+    width: 48px;
+    height: 48px;
+    margin-right: 10px;
+}
+
+.transaction-list {
+    margin-top: 20px;
+}
+
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #2a2a2a;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.transaction-item span {
+    margin-right: 10px;
+}
