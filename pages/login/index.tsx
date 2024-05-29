@@ -1,29 +1,31 @@
 import React, { useEffect } from "react"
-import { useWalletStorage } from "~storage"
-import { english, generateMnemonic } from "viem/accounts"
 import { useNavigate } from "react-router-dom"
-import { useWalletState } from "~states"
+import { useWalletStorage } from "~storage"
+import { ExtensionStorage } from "~storage/storage"
 
 export const Login = () => {
-    const { wallet, initWallet } = useWalletStorage()
-    const initState = useWalletState((state: any) => state.initState)
+    // const { wallet } = useWalletStorage()
     const navigator = useNavigate()
 
     useEffect(() => {
-        if (wallet) {
-            initState(wallet.selectedChain, wallet.encryptedMnemonic)
-            navigator("/home")
-        }
-    }, [wallet])
+        (async () => {
+            const wallet = await ExtensionStorage.get("wallet")
+            console.log(wallet)
+            if (!wallet) {
+                navigator("/create")
+            }
+        })()
+    })
 
-    const onCreateWallet = async () => {
-        const mnemonic = generateMnemonic(english)
-        await initWallet(mnemonic)
+    const onLogin = async () => {
+        // initState(wallet.selectedChain, wallet.encryptedMnemonic)
+        navigator("/home")
+        // await initWallet(mnemonic)
     }
 
     return (
         <div>
-            <button className="btn" onClick={onCreateWallet}>Create Wallet</button>
+            <button className="btn" onClick={onLogin}>Login</button>
         </div>
     )
 }

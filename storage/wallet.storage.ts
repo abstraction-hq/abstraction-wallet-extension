@@ -1,35 +1,28 @@
-import { Storage } from "@plasmohq/storage"
 import { useStorage } from "@plasmohq/storage/hook"
-import { assert } from "console"
 import { createPublicClient, http, PublicClient } from "viem"
 import { mnemonicToAccount } from "viem/accounts"
 import { NETWORKS } from "~constants"
 import { AccountService } from "~services"
+import { ExtensionStorage } from "./storage"
 
-interface IWallet {
+export interface IWallet {
     selectedChain: string
     encryptedMnemonic: string
 }
 
+
 export const useWalletStorage = () => {
     const [wallet, setWallet] = useStorage<IWallet>({
         key: "wallet",
-        instance: new Storage()
+        instance: ExtensionStorage
     })
 
     const initWallet = async (mnemonic: string): Promise<IWallet> => {
-        // const ethClient = createPublicClient({
-        //     chain: NETWORKS["testnet"],
-        //     transport: http()
-        // })
-        // const signer = mnemonicToAccount(mnemonic)
-        // const account = new AccountService(signer, ethClient as PublicClient)
-        // const sender = await account.getSender()
         const wallet = {
             selectedChain: "testnet",
             encryptedMnemonic: mnemonic
         }
-        setWallet(wallet)
+        await setWallet(wallet)
 
         return wallet
     }
