@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { useWalletStorage } from "~storage"
-import { ExtensionStorage } from "~storage/storage"
+import { getWallets } from "~wallets"
 
 export const Login = () => {
     // const { wallet } = useWalletStorage()
@@ -9,9 +8,9 @@ export const Login = () => {
 
     useEffect(() => {
         (async () => {
-            const wallet = await ExtensionStorage.get("wallet")
-            console.log(wallet)
-            if (!wallet) {
+            const wallets = await getWallets()
+            console.log(wallets)
+            if (wallets.length == 0) {
                 navigator("/create")
             }
         })()
