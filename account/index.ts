@@ -4,45 +4,7 @@ import { FACTORY_ADDRESS, ENTRY_POINT_ADDRESS } from "../constants";
 import Factory from "../assets/abis/Factory.json";
 import Wallet from "../assets/abis/Wallet.json";
 import Entrypoint from "../assets/abis/Entrypoint.json";
-
-export interface AccountOpt {
-    mnemonic: string
-    ethClient: PublicClient
-}
-
-export interface UserOperation {
-    sender: Address;
-    nonce: bigint;
-    initCode: Hex;
-    callData: Hex;
-    callGasLimit: bigint;
-    verificationGasLimit: bigint;
-    preVerificationGas: bigint;
-    maxFeePerGas: bigint;
-    maxPriorityFeePerGas: bigint;
-    paymasterAndData: Hex;
-    signature: Hex;
-}
-
-export interface RawUserOperation {
-    sender: Address;
-    nonce: Hex;
-    initCode: Hex;
-    callData: Hex;
-    callGasLimit: Hex;
-    verificationGasLimit: Hex;
-    preVerificationGas: Hex;
-    maxFeePerGas: Hex;
-    maxPriorityFeePerGas: Hex;
-    paymasterAndData: Hex;
-    signature: Hex;
-}
-
-export interface CallContractArgs {
-    target: Address;
-    value: bigint;
-    data: Hex
-}
+import { CallContractArgs, RawUserOperation, UserOperation } from "./types";
 
 export const DEFAULT_USER_OP: UserOperation = {
     sender: zeroAddress,
@@ -62,8 +24,6 @@ export class AccountService {
     ethClient: PublicClient
     signer: Signer
 
-    signerAddress: Address = zeroAddress
-    
     address: Address = zeroAddress
     initCode: Hex | undefined
     nonceKey = 0n;

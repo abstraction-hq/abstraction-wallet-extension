@@ -2,7 +2,7 @@ import { createPublicClient, http, PublicClient } from 'viem'
 import { mnemonicToAccount } from 'viem/accounts'
 import { create } from 'zustand'
 import { NETWORKS } from '~constants'
-import { AccountService } from '~services'
+import { AccountService } from '~account'
 
 export const useWalletState = create((set) => ({
     account: null,

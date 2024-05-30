@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Hex, PublicClient } from "viem";
-import { AccountService } from "~services";
+import { AccountService } from "~account";
 import { useWalletState } from "~states";
 
 export const Home = () => {
@@ -19,7 +19,6 @@ export const Home = () => {
             const balance = await ethClient.getBalance({address})
             setBalance(balance.toString())
         }
-
     }
 
     useEffect(() => {
@@ -33,7 +32,7 @@ export const Home = () => {
     return (
         <div>
             <div>Wallet address: {address}</div>
-            <div>Wallet balance: {balance}</div>
+            <div>Wallet balance: {balance} VIC</div>
         </div>
     )
 }
