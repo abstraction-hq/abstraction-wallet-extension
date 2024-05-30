@@ -4,8 +4,8 @@ import { Login } from "./pages/login"
 import { Home } from "~pages/home"
 import { Create } from "~pages/create"
 
+import "./style.css"
 import "./popup.css"
-// import "./style.css"
 
 function IndexPopup() {
   return (

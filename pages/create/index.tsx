@@ -1,4 +1,3 @@
-import { useStorage } from "@plasmohq/storage/hook"
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { english, generateMnemonic } from "viem/accounts"
@@ -16,7 +15,6 @@ export const Create = () => {
     })
 
     const onCreateWallet = async () => {
-        // await initWallet(generatedMnemonic)
         navigator("/")
     }
 
