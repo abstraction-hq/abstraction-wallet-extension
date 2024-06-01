@@ -1,4 +1,4 @@
-import { Address, Hex } from "viem"
+import { Address, createPublicClient, Hex, http, PublicClient } from "viem"
 
 import {
     ACTIVE_WALLET,
@@ -9,17 +9,28 @@ import {
 
 import { IStoredWallet } from "./types"
 import { encryptMnemonic, hashPassword } from "./encryption"
+import { AccountService } from "~account"
+import { NETWORKS } from "~constants"
+import { mnemonicToAccount } from "viem/accounts"
 
 export * from "./encryption"
 
 export const initWallet = async (mnemonic: string, password: string) => {
+    const ethClient = createPublicClient({
+        chain: NETWORKS["testnet"],
+        transport: http()
+    })
+    const signer = mnemonicToAccount(mnemonic)
+    const account = new AccountService(signer, ethClient as PublicClient)
+
+    const sender = await account.getSender()
+
     const encryptedMnemonic: string = await encryptMnemonic(
         mnemonic,
         password
     )
 
     const passwordHash: Hex = hashPassword(password)
-    //TODO: store
 }
 
 export const getWallets = async (): Promise<IStoredWallet[]> => {
@@ -52,4 +63,8 @@ export const storeMnemonic = async (mnemonic: string) => {
 
 export const storePassword = async (password: string) => {
     await ExtensionStorage.set(ENCRYPTED_MNEMONIC, password)
+}
+
+export const addWallet = async (address: Address)  => {
+
 }

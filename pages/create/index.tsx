@@ -7,7 +7,6 @@ import { initWallet } from "~wallets"
 
 export const Create = () => {
 	const [generatedMnemonic, setGeneratedMnemonic] = useState("")
-	const [confirmMnemonic, setConfirmMnemonic] = useState("")
 	const [password, setPassword] = useState("")
 	const [confirmPassword, setConfirmPassword] = useState("")
 
@@ -24,21 +23,19 @@ export const Create = () => {
 
 	useEffect(() => {
         setAlert("")
-	}, [confirmMnemonic, confirmPassword])
+	}, [confirmPassword])
 
 	const onCreateWallet = async () => {
-        // if (generatedMnemonic != confirmMnemonic) {
-        //     setAlert("Mnemonic mismatch")
-        // } else if (password != confirmPassword) {
-        //     setAlert("password mismatch")
-        // } else {
-		// 	await initWallet(generatedMnemonic, password)
-		// 	initWalletState("testnet", generatedMnemonic)
-		// 	navigator("/home")
-        // }
-		await initWallet(generatedMnemonic, password)
-		initWalletState("testnet", generatedMnemonic)
-		navigator("/home")
+        if (password != confirmPassword) {
+            setAlert("password mismatch")
+        } else {
+			await initWallet(generatedMnemonic, password)
+			initWalletState("testnet", generatedMnemonic)
+			navigator("/home")
+        }
+		// await initWallet(generatedMnemonic, password)
+		// initWalletState("testnet", generatedMnemonic)
+		// navigator("/home")
 	}
     
     console.log(alert)
@@ -50,30 +47,6 @@ export const Create = () => {
 					Create Wallet
 				</h2>
 				<form action="#">
-					<div className="mb-4">
-						<label className="block text-sm font-bold mb-2">
-							Mnemonic
-						</label>
-						<input
-							className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline text-black"
-							id="mnemonic"
-							type="text"
-							defaultValue={generatedMnemonic}
-						/>
-					</div>
-					<div className="mb-4">
-						<label
-							className="block text-sm font-bold mb-2"
-							htmlFor="confirm mnemonic">
-							Confirm Mnemonic
-						</label>
-						<input
-							className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline text-black"
-							placeholder="Confirm mnemonic"
-							value={confirmMnemonic}
-							onChange={(e) => setConfirmMnemonic(e.target.value)}
-						/>
-					</div>
 					<div className="mb-4">
 						<label
 							className="block text-sm font-bold mb-2"

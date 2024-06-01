@@ -9,7 +9,6 @@ export const Login = () => {
     useEffect(() => {
         (async () => {
             const wallets = await getWallets()
-            console.log(wallets)
             if (wallets.length == 0) {
                 navigator("/create")
             }
