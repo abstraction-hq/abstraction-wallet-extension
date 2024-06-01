@@ -1,6 +1,9 @@
 import { Address } from "viem"
 
-export type IStoredWallet = Address
+export type IStoredWallet = {
+    index: number
+    address: Address
+}
 
 export interface IStoredMnemonic {
     encryptedMnemonic: string

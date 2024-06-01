@@ -10,7 +10,7 @@ export const Create = () => {
 	const [password, setPassword] = useState("")
 	const [confirmPassword, setConfirmPassword] = useState("")
 
-	const initWalletState = useWalletState((state: any) => state.initState)
+	const setWalletState = useWalletState((state: any) => state.setWalletState)
 
 	const [alert, setAlert] = useState("")
 
@@ -30,16 +30,11 @@ export const Create = () => {
             setAlert("password mismatch")
         } else {
 			await initWallet(generatedMnemonic, password)
-			initWalletState("testnet", generatedMnemonic)
+			setWalletState("testnet", generatedMnemonic, 0)
 			navigator("/home")
         }
-		// await initWallet(generatedMnemonic, password)
-		// initWalletState("testnet", generatedMnemonic)
-		// navigator("/home")
 	}
     
-    console.log(alert)
-
 	return (
 		<div>
 			<div className="p-8 rounded shadow-md w-full max-w-md">

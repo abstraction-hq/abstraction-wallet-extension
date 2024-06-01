@@ -4,16 +4,31 @@ import {
     ACTIVE_WALLET,
     ENCRYPTED_MNEMONIC,
     ExtensionStorage,
+    PASSWORD_HASH,
     WALLET_LIST
 } from "~storage"
 
 import { IStoredWallet } from "./types"
-import { encryptMnemonic, hashPassword } from "./encryption"
+import { decryptMnemonic, encryptMnemonic, hashPassword } from "./encryption"
 import { AccountService } from "~account"
 import { NETWORKS } from "~constants"
 import { mnemonicToAccount } from "viem/accounts"
 
-export * from "./encryption"
+const setWalletList = async (wallets: IStoredWallet[]) => {
+    await ExtensionStorage.set(WALLET_LIST, wallets)
+}
+
+const setActiveWallet = async (wallet: IStoredWallet) => {
+    await ExtensionStorage.set(ACTIVE_WALLET, wallet)
+}
+
+const setEncryptedMnemonic = async (encryptedMnemonic: string) => {
+    await ExtensionStorage.set(ENCRYPTED_MNEMONIC, encryptedMnemonic)
+}
+
+const setPassword = async (passwordHash: string) => {
+    await ExtensionStorage.set(PASSWORD_HASH, passwordHash)
+}
 
 export const initWallet = async (mnemonic: string, password: string) => {
     const ethClient = createPublicClient({
@@ -25,12 +40,22 @@ export const initWallet = async (mnemonic: string, password: string) => {
 
     const sender = await account.getSender()
 
+    const storeWallet: IStoredWallet = {
+        index: 0,
+        address: sender
+    }
+
+    await setWalletList([storeWallet])
+    await setActiveWallet(storeWallet)
+
     const encryptedMnemonic: string = await encryptMnemonic(
         mnemonic,
         password
     )
+    await setEncryptedMnemonic(encryptedMnemonic)
 
     const passwordHash: Hex = hashPassword(password)
+    await setPassword(passwordHash)
 }
 
 export const getWallets = async (): Promise<IStoredWallet[]> => {
@@ -40,21 +65,28 @@ export const getWallets = async (): Promise<IStoredWallet[]> => {
     return wallets || []
 }
 
-export const getActiveWallet = async (): Promise<Address | null> => {
-    const activeWallet: Address | undefined =
+export const getActiveWallet = async (): Promise<IStoredWallet | null> => {
+    const activeWallet: IStoredWallet | undefined =
         await ExtensionStorage.get(ACTIVE_WALLET)
 
     return activeWallet || null
 }
 
 export const getMnemonic = async (password: string): Promise<string> => {
-    const mnemonic: string | undefined =
+    const encryptedMnemonic: string | undefined =
         await ExtensionStorage.get(ENCRYPTED_MNEMONIC)
-    return mnemonic || ""
+    let mnemonic = ""
+    if (encryptedMnemonic) {
+        mnemonic = await decryptMnemonic(encryptedMnemonic, password)
+    }
+    return mnemonic
 }
 
 export const checkPassword = async (password: string): Promise<boolean> => {
-    return true
+    const passwordHash = hashPassword(password)
+    const passwordHashStored = await ExtensionStorage.get(PASSWORD_HASH)
+
+    return passwordHash == passwordHashStored
 }
 
 export const storeMnemonic = async (mnemonic: string) => {
@@ -66,5 +98,4 @@ export const storePassword = async (password: string) => {
 }
 
 export const addWallet = async (address: Address)  => {
-
 }

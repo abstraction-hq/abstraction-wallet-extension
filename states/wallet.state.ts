@@ -7,12 +7,14 @@ import { AccountService } from '~account'
 export const useWalletState = create((set) => ({
     account: null,
     ethClient: null,
-    initState: (selectedChain: string, mnemonic: string) => {
+    setWalletState: (selectedChain: string, mnemonic: string, signerIndex: number) => {
         const ethClient = createPublicClient({
             chain: NETWORKS[selectedChain],
             transport: http()
         })
-        const signer = mnemonicToAccount(mnemonic)
+        const signer = mnemonicToAccount(mnemonic, {
+            addressIndex: signerIndex
+        })
         const account = new AccountService(signer, ethClient as PublicClient)
         set({
             account,
