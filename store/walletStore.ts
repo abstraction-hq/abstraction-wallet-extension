@@ -6,9 +6,10 @@ import localforage from "localforage";
 export const useWalletStore = create<IWalletStoreState>()(persist(
   (set) => ({
     wallets: [],
+    activeWallet: 0,
     onCreateWallet: (wallet: IWallet) => {
       set(state => ({
-        wallet: [...state.wallets, wallet],
+        wallets: [...state.wallets, wallet],
         activeWallet: wallet.id
       }))
     },

@@ -1,15 +1,21 @@
+import { NETWORKS } from '@/constants';
 import { encryptMnemonic, hashPassword } from '@/crypto/encryption';
-import { useUserStore } from '@/store';
+import { AccountService } from '@/hooks/account.service';
+import { useUserStore, useWalletStore } from '@/store';
 import { useCacheStore } from '@/store/cacheStore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { english, generateMnemonic } from 'viem/accounts';
+import { createPublicClient, http, PublicClient } from 'viem';
+import { english, generateMnemonic, mnemonicToAccount } from 'viem/accounts';
 
 const CreateWalletPage: React.FC = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showError, setShowError] = useState(false);
+
     const setUserCredentials = useUserStore((state) => state.onSetCredentials);
+    const createWallet = useWalletStore((state) => state.onCreateWallet);
+    const wallets = useWalletStore((state) => state.wallets);
     const initCache = useCacheStore((state) => state.onInitCache);
 
     const navigator = useNavigate();
@@ -28,12 +34,23 @@ const CreateWalletPage: React.FC = () => {
             const encryptedMnemonic = await encryptMnemonic(mnemonic, password)
             const passwordHash = hashPassword(password)
 
-            initCache(password)
+            const tempAccount = new AccountService(mnemonicToAccount(mnemonic), createPublicClient({
+                chain: NETWORKS["testnet"],
+                transport: http()
+            }) as PublicClient)
+
+            const sender = await tempAccount.getSender()
 
             setUserCredentials({
                 password: passwordHash,
                 encryptedMnemonic: encryptedMnemonic
             })
+            createWallet({
+                id: 0,
+                name: `Wallet ${wallets.length + 1}`,
+                address: sender,
+            })
+            initCache(password)
 
             navigator('/home')
         }

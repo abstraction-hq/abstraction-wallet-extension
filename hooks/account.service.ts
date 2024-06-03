@@ -4,7 +4,7 @@ import { FACTORY_ADDRESS, ENTRY_POINT_ADDRESS } from "@/constants";
 import Factory from "@/assets/abis/Factory.json";
 import Wallet from "@/assets/abis/Wallet.json";
 import Entrypoint from "@/assets/abis/Entrypoint.json";
-import { CallContractArgs, RawUserOperation, UserOperation } from "@/services/types";
+import { CallContractArgs, RawUserOperation, UserOperation } from "@/hooks/types";
 
 export const DEFAULT_USER_OP: UserOperation = {
     sender: zeroAddress,

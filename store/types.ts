@@ -7,7 +7,7 @@ export interface IWallet {
 }
 
 export interface IWalletStoreState {
-    activeWallet?: number
+    activeWallet: number
     wallets: IWallet[]
     onCreateWallet: (wallet: IWallet) => void
     setActiveWallet: (id: number) => void

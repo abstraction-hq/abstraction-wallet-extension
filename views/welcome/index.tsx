@@ -15,7 +15,7 @@ const WelcomeView: React.FC = () => {
         if (cachePassword && credentials) {
             navigator('/home');
         }
-    }, []);
+    }, [credentials, cachePassword]);
 
     const handleCreateWallet = () => {
         navigator('/create');
