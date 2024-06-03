@@ -16,13 +16,14 @@
       ]
     },
     "baseUrl": ".",
-    "target": "es5",
+    "target": "ES2020",
     "lib": ["dom", "es2015", "es2017"],
     "jsx": "react",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": false
   }
 }
