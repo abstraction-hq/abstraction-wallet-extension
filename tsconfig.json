@@ -1,6 +1,5 @@
 {
   "extends": "./.wxt/tsconfig.json",
-  "target": "ES2020",
   "compilerOptions": {
     "allowImportingTsExtensions": true,
     "jsx": "react-jsx"
