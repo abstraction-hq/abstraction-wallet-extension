@@ -1,19 +1,30 @@
 import { Hex } from "viem";
 
-export interface Mnemonic {
-    encryptedSeed: string
-    password: string
-}
-
-export interface Wallet {
-    id: string
+export interface IWallet {
+    id: number
     name: string
     address: Hex
 }
 
 export interface IWalletStoreState {
-  activeWallet?: string
-  wallet: Wallet[]
-  mnemonic?: Mnemonic
-  onCreateWallet: (createObject: Wallet) => void
+    activeWallet?: number
+    wallets: IWallet[]
+    onCreateWallet: (wallet: IWallet) => void
+    setActiveWallet: (id: number) => void
+}
+
+export interface IUserCredentials {
+    password?: string;
+    encryptedMnemonic?: string
+}
+
+export interface IUserStoreState {
+    credentials?: IUserCredentials;
+    onSetCredentials: (credentials: IUserCredentials) => void;
+    initMnemonic: (mnemonic: string) => void;
+}
+
+export interface ICacheStoreState {
+    cachePassword?: string;
+    onInitCache: (password: string) => void;
 }

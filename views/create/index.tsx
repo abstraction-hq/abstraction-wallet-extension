@@ -1,20 +1,41 @@
+import { encryptMnemonic, hashPassword } from '@/crypto/encryption';
+import { useUserStore } from '@/store';
+import { useCacheStore } from '@/store/cacheStore';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { english, generateMnemonic } from 'viem/accounts';
 
 const CreateWalletPage: React.FC = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showError, setShowError] = useState(false);
+    const setUserCredentials = useUserStore((state) => state.onSetCredentials);
+    const initCache = useCacheStore((state) => state.onInitCache);
+
+    const navigator = useNavigate();
 
     useEffect(() => {
         setShowError(false);
     }, [password, confirmPassword]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
         if (password !== confirmPassword) {
             setShowError(true);        
         } else {
-            console.log('Wallet created!');
+            const mnemonic = generateMnemonic(english)
+            const encryptedMnemonic = await encryptMnemonic(mnemonic, password)
+            const passwordHash = hashPassword(password)
+
+            initCache(password)
+
+            setUserCredentials({
+                password: passwordHash,
+                encryptedMnemonic: encryptedMnemonic
+            })
+
+            navigator('/home')
         }
     };
 
@@ -38,7 +59,7 @@ const CreateWalletPage: React.FC = () => {
                 {showError && <p>Passwords do not match!</p>}
                 <button 
                     type="submit" 
-                    className="w-full px-6 py-2 text-lg text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue"
+                    className="w-full px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue"
                 >
                     Create Wallet
                 </button>

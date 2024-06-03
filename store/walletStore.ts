@@ -1,15 +1,20 @@
 import { create } from "zustand";
-import { IWalletStoreState } from "./types";
+import { IWallet, IWalletStoreState } from "./types";
 import { createJSONStorage, persist } from "zustand/middleware";
 import localforage from "localforage";
 
 export const useWalletStore = create<IWalletStoreState>()(persist(
   (set) => ({
-    wallet: [],
-    onCreateWallet: (createObject) => {
+    wallets: [],
+    onCreateWallet: (wallet: IWallet) => {
       set(state => ({
-        wallet: [...state.wallet, createObject],
-        activeWallet: createObject.id
+        wallet: [...state.wallets, wallet],
+        activeWallet: wallet.id
+      }))
+    },
+    setActiveWallet: (id: number) => {
+      set(state => ({
+        activeWallet: id
       }))
     }
   }),

@@ -1,8 +1,21 @@
-import React from 'react';
+import { useWalletStore, useUserStore } from '@/store';
+import { useCacheStore } from '@/store/cacheStore';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const WelcomeView: React.FC = () => {
     const navigator = useNavigate();
+    const credentials = useUserStore((state) => state.credentials);
+    const cachePassword = useCacheStore((state) => state.cachePassword);
+
+    useEffect(() => {
+        if (!cachePassword && credentials) {
+            navigator('/login');
+        }
+        if (cachePassword && credentials) {
+            navigator('/home');
+        }
+    }, []);
 
     const handleCreateWallet = () => {
         navigator('/create');
