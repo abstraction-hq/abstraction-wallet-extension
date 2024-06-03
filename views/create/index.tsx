@@ -19,7 +19,7 @@ const CreateWalletPage: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className='flex flex-col h-screen justify-center'>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <input
                     type="password"
