@@ -19,7 +19,7 @@ export const useCacheStore = create<ICacheStoreState>()(persist(
         }
     }),
     {
-        name: 'user-store',
+        name: 'cache-store',
         storage: createJSONStorage(() => localforage)
     }
 ))
