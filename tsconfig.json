@@ -1,29 +1,8 @@
 {
-  "extends": "plasmo/templates/tsconfig.base",
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    ".plasmo/index.d.ts",
-    "./**/*.ts",
-    "./**/*.tsx",
-    "src"
-  ],
+  "extends": "./.wxt/tsconfig.json",
+  "target": "ES2020",
   "compilerOptions": {
-    "paths": {
-      "~*": [
-        "./*"
-      ]
-    },
-    "baseUrl": ".",
-    "target": "ES2020",
-    "lib": ["dom", "es2015", "es2017"],
-    "jsx": "react",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "verbatimModuleSyntax": false
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx"
   }
 }
