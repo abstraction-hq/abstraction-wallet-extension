@@ -1,11 +1,14 @@
 export default defineContentScript({
-    matches: ['*://*/*'],
-    runAt: 'document_idle',
+    matches: ['<all_urls>'],
     main() {
         console.log('Hello content.');
         const script = document.createElement('script');
-        script.setAttribute('type', 'text/javascript');
+        script.setAttribute('src', `
+        window.abstraction = {
+            name: 'abstraction',
+        }
+        `);
 
-        // (document.head || document.documentElement).appendChild(script);
+        (document.head || document.documentElement).appendChild(script);
     },
 });

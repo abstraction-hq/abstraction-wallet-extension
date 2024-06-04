@@ -8,11 +8,10 @@ export default defineConfig({
   }),
   manifest: {
     permissions: ['storage'],
-    content_scripts: [
+    content_scripts: [ 
       {
-        matches: ['*://*/*'],
+        matches: ['<all_urls>'],
         js: ['content-scripts/content.js'],
-        run_at: 'document_idle',
       },
     ],
   }

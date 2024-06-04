@@ -1,5 +1,5 @@
 export default defineBackground(() => {
-    alert("Hello world")
+    console.log('Hello background!', { id: browser.runtime.id });
 
     browser.runtime.onConnect.addListener((port) => {
         if (port.name !== 'example') return;
@@ -12,5 +12,3 @@ export default defineBackground(() => {
     });
 });
 
-
-console.log('Hello background!', { id: browser.runtime.id });
