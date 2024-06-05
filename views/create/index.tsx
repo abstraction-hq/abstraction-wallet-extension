@@ -6,7 +6,7 @@ import { AccountService } from "~account"
 import { NETWORKS } from "~constants"
 import { useUserStore, useWalletStore } from "~stores"
 
-import { encryptMnemonic, hashPassword } from "~wallets/encryption"
+import { encryptMnemonic, hashPassword } from "~crypto/encryption"
 
 const CreateView = () => {
 	const [password, setPassword] = useState("")

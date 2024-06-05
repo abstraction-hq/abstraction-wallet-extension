@@ -3,8 +3,8 @@ import { useFetcher, useNavigate } from "react-router-dom"
 
 import { useWalletState } from "~states"
 import { useWalletStore } from "~stores/walletStore"
-import { checkPassword, getActiveWallet, getMnemonic } from "~wallets"
-import { IStoredWallet } from "~wallets/types"
+import { checkPassword, getActiveWallet, getMnemonic } from "~crypto"
+import { IStoredWallet } from "~crypto/types"
 
 const LoginView = () => {
     const wallets = useWalletStore((state) => state.wallets)

@@ -1,5 +1,5 @@
 import { NETWORKS } from '~constants';
-import { decryptMnemonic } from '~wallets/encryption';
+import { decryptMnemonic } from '~crypto/encryption';
 import { AccountService } from '~account';
 import { useUserStore, useWalletStore } from '~stores';
 import React, { useEffect, useRef } from 'react';
