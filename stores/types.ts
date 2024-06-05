@@ -21,7 +21,6 @@ export interface IUserCredentials {
 export interface IUserStoreState {
     credentials?: IUserCredentials;
     onSetCredentials: (credentials: IUserCredentials) => void;
-    initMnemonic: (mnemonic: string) => void;
 }
 
 export interface ICacheStoreState {

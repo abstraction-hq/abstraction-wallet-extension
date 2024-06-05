@@ -6,7 +6,7 @@ import { useWalletStore } from "~stores/walletStore"
 import { checkPassword, getActiveWallet, getMnemonic } from "~wallets"
 import { IStoredWallet } from "~wallets/types"
 
-export const Login = () => {
+const LoginView = () => {
     const wallets = useWalletStore((state) => state.wallets)
     useEffect(() => {
         console.log(wallets)
@@ -87,3 +87,5 @@ export const Login = () => {
     //     </div>
     // )
 }
+
+export default LoginView

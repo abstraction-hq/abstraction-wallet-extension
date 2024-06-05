@@ -22,7 +22,7 @@ export const useWalletStore = create<IWalletStoreState>()(
             }
         }),
         {
-            name: "wallet-store",
+            name: "useWalletStore",
             storage: createJSONStorage(() => localforage)
         }
     )

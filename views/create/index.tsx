@@ -1,36 +1,53 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { english, generateMnemonic } from "viem/accounts"
-import { useWalletState } from "~states"
+import { createPublicClient, http, PublicClient } from "viem"
+import { english, generateMnemonic, mnemonicToAccount } from "viem/accounts"
+import { AccountService } from "~account"
+import { NETWORKS } from "~constants"
+import { useUserStore, useWalletStore } from "~stores"
 
-import { initWallet } from "~wallets"
+import { encryptMnemonic, hashPassword } from "~wallets/encryption"
 
-export const Create = () => {
-	const [generatedMnemonic, setGeneratedMnemonic] = useState("")
+const CreateView = () => {
 	const [password, setPassword] = useState("")
 	const [confirmPassword, setConfirmPassword] = useState("")
-
-	const setWalletState = useWalletState((state: any) => state.setWalletState)
+	const wallets = useWalletStore((state) => state.wallets)
+	const setUserCredentials = useUserStore((state) => state.onSetCredentials)
+	const createWallet = useWalletStore((state) => state.onCreateWallet)
 
 	const [alert, setAlert] = useState("")
 
 	const navigator = useNavigate()
 
 	useEffect(() => {
-		const mnemonic = generateMnemonic(english)
-		setGeneratedMnemonic(mnemonic)
-	}, [])
-
-	useEffect(() => {
         setAlert("")
-	}, [confirmPassword])
+	}, [confirmPassword, password])
 
 	const onCreateWallet = async () => {
         if (password != confirmPassword) {
             setAlert("password mismatch")
         } else {
-			await initWallet(generatedMnemonic, password)
-			setWalletState("testnet", generatedMnemonic, 0)
+			const mnemonic = generateMnemonic(english)
+			const encryptedMnemonic = await encryptMnemonic(mnemonic, password)
+            const passwordHash = hashPassword(password)
+
+            const tempAccount = new AccountService(mnemonicToAccount(mnemonic), createPublicClient({
+                chain: NETWORKS["testnet"],
+                transport: http()
+            }) as PublicClient)
+            const sender = await tempAccount.getSender()
+
+			setUserCredentials({
+                password: passwordHash,
+                encryptedMnemonic: encryptedMnemonic
+            })
+
+            createWallet({
+                id: 0,
+                name: `Wallet ${wallets.length + 1}`,
+                address: sender,
+            })
+
 			navigator("/home")
         }
 	}
@@ -92,3 +109,5 @@ export const Create = () => {
 		</div>
 	)
 }
+
+export default CreateView;
