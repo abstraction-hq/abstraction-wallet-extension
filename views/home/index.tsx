@@ -1,27 +1,15 @@
-import { NETWORKS } from '~constants';
-import { decryptMnemonic } from '~crypto/encryption';
-import { AccountService } from '~account';
+import { Account } from '~crypto/account';
 import { useUserStore, useWalletStore } from '~stores';
 import React, { useEffect, useRef } from 'react';
-import { PublicClient, createPublicClient, http } from 'viem';
-import { mnemonicToAccount } from 'viem/accounts';
 
 const HomePage: React.FC = () => {
     const activeWallet: number = useWalletStore((state) => state.activeWallet)
     const wallets = useWalletStore((state) => state.wallets)
     const credentials = useUserStore((state) => state.credentials)
 
-    const account = useRef<AccountService>()
+    const account = useRef<Account>()
 
     const initAccount = async () => {
-        if (activeWallet !== null && credentials?.encryptedMnemonic) {
-            const mnemonic = await decryptMnemonic(credentials.encryptedMnemonic, "huy")
-
-            account.current = new AccountService(mnemonicToAccount(mnemonic), createPublicClient({
-                chain: NETWORKS["testnet"],
-                transport: http()
-            }) as PublicClient)
-        }
     }
 
     useEffect(() => {
@@ -34,7 +22,10 @@ const HomePage: React.FC = () => {
         <div className="rounded-lg p-4 shadow">
             <p className="mb-2">Wallet Name: {wallets[activeWallet]?.name}</p>
             <div className="flex items-center mb-2">
-                <p className="mr-2">Address: {wallets[activeWallet]?.address}</p>
+                <p className="mr-2">Address: {wallets[activeWallet]?.senderAddress}</p>
+            </div>
+            <div className="flex items-center mb-2">
+                <p className="mr-2">Signer Address: {wallets[activeWallet]?.signerAddress}</p>
             </div>
             <p className="mb-2">Balance: {0} VIC</p>
             <div className="flex mt-4">

@@ -1,9 +1,10 @@
-import { Hex } from "viem";
+import { Address, Hex } from "viem";
 
 export interface IWallet {
     id: number
     name: string
-    address: Hex
+    senderAddress: Address
+    signerAddress: Address
 }
 
 export interface IWalletStoreState {

@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IWallet } from '~stores/types';
 import { useWalletStore } from '~stores/walletStore';
 
 const WelcomeView: React.FC = () => {
     const wallets = useWalletStore((state) => state.wallets);
     const navigator = useNavigate();
 
-
     useEffect(() => {
         if (wallets.length > 0) {
             navigator("/home");
         }
+
     }, [wallets]);
 
     const handleCreateWallet = () => {
