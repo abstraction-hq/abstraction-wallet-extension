@@ -6,13 +6,4 @@ export default defineConfig({
   vite: () => ({
     plugins: [react()],
   }),
-  manifest: {
-    permissions: ['storage'],
-    content_scripts: [ 
-      {
-        matches: ['<all_urls>'],
-        js: ['content-scripts/content.js'],
-      },
-    ],
-  }
 });
