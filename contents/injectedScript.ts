@@ -5,20 +5,36 @@ interface IRequest {
 
 const AbstractionWallet: Record<string, any> = {
     walletName: "abstraction",
-    request: async ({ method, params = [] }: IRequest) => {
+    isMetamask: true,
+    request: ({ method, params = [] }: IRequest) => {
         // @ts-ignore
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             // Here you would handle different methods. This is just a placeholder.
-            console.log(`Handling request: ${method} with params: ${params}`)
-            window.postMessage({ method, params }, window.location.origin)
+            const data = {
+                method,
+                params,
+                type: "request",
+                callID: Math.random().toString(36).substring(2),
+            }
+            window.postMessage(data, window.location.origin)
 
-            window.addEventListener("message", async (event) => {
-                console.log(`Received response: ${event}`)
-                resolve("Hello from AbstractionWallet!")
-            })
+            window.addEventListener("message", callback)
+
+            async function callback(event: any) {
+                const { data: res } = event
+                if (res.callID !== data.callID) return
+                if (res.type !== "response") return
+
+                window.removeEventListener("message", callback)
+
+                if (event.data.error) {
+                    return reject(event.data.message)
+                }
+                return resolve(event.data.message)
+            }
         })
     }
 }
 
 // @ts-ignore
-window.abstraction = AbstractionWallet
+window.ethereum = AbstractionWallet
