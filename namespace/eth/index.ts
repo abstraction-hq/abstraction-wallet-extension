@@ -1,3 +1,5 @@
+import { useWalletStore } from "~stores"
+
 export default class EthNamespace {
     public chainId = async (): Promise<number> => {
         return 1

@@ -1,5 +1,6 @@
 import { onMessage } from "webext-bridge/background"
 import EthNamespace from "~namespace/eth"
+import { ExtensionStorage } from "~utils/storage"
 
 const eth = new EthNamespace()
 
