@@ -1,12 +1,13 @@
 import { onMessage } from "webext-bridge/background"
 import EthNamespace from "~namespace/eth"
-import { ExtensionStorage } from "~utils/storage"
 
 const eth = new EthNamespace()
 
 const modules: any = {
     eth: eth
 }
+
+console.log("Background script running")
 
 onMessage("api_call", async (event) => {
     const { data }: any = event

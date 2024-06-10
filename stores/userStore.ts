@@ -1,8 +1,8 @@
-import localforage from "localforage"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
-import { IUserStoreState } from "./types"
+import { IUserStoreState } from "~types/storages/types"
+import { ExtensionStorageWrapper } from "~utils/storage"
 
 export const useUserStore = create<IUserStoreState>()(
     persist(
@@ -12,7 +12,7 @@ export const useUserStore = create<IUserStoreState>()(
         }),
         {
             name: "useUserStore",
-            storage: createJSONStorage(() => localforage)
+            storage: createJSONStorage(() => ExtensionStorageWrapper),
         }
     )
 )
