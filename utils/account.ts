@@ -18,7 +18,7 @@ import Factory from "~assets/abis/Factory.json"
 import Wallet from "~assets/abis/Wallet.json"
 
 import { ENTRY_POINT_ADDRESS, ERC1967ProxyCreationCode, FACTORY_ADDRESS, WALLET_IMPLEMENT_ADDRESS } from "../constants"
-import { CallContractArgs, RawUserOperation, UserOperation } from "./types"
+import { CallContractArgs, RawUserOperation, UserOperation } from "~types/account/types"
 
 export const DEFAULT_USER_OP: UserOperation = {
     sender: zeroAddress,

@@ -14,9 +14,3 @@ export const ExtensionStorageWrapper = {
         return await ExtensionStorage.remove(key)
     }
 }
-
-// key for wallet
-export const WALLET_LIST: string = "wallets"
-export const ACTIVE_WALLET: string = "active_wallet"
-export const ENCRYPTED_MNEMONIC: string = "encrypted_mnemonic"
-export const PASSWORD_HASH: string = "password_hash"

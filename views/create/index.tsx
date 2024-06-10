@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { createPublicClient, http, PublicClient } from "viem"
 import { english, generateMnemonic, mnemonicToAccount } from "viem/accounts"
 
-import { NETWORKS } from "~constants"
-import { Account } from "~crypto/account"
-import { encryptMnemonic, hashPassword } from "~crypto/encryption"
+import { Account } from "~utils/account"
+import { encryptMnemonic, hashPassword } from "~utils/encryption"
 import { useUserStore, useWalletStore } from "~stores"
+import { createPublicClient, http, PublicClient } from "viem"
+import { NETWORKS } from "~constants"
+import { handleUserOp } from "~utils/bundler"
 
 const CreateView = () => {
     const [password, setPassword] = useState("")
@@ -34,28 +35,50 @@ const CreateView = () => {
     }
 
     const initWallet = async (mnemonic: string) => {
-        const account = mnemonicToAccount(mnemonic, { addressIndex: 0 })
+        const signer = mnemonicToAccount(mnemonic, { addressIndex: 0 })
+        const account = new Account(signer.address)
+        const sender = account.getSender()
 
-        const sender = new Account(account.address).getSender()
+        const ethClient = createPublicClient({
+            chain: NETWORKS["testnet"],
+            transport: http()
+        }) as PublicClient
 
-        createWallet({
-            id: 0,
-            name: `Wallet ${wallets.length + 1}`,
-            senderAddress: sender,
-            signerAddress: account.address
+        const [initWalletOp, userOpHash] = await account.sendTransactionOperation(ethClient, [{
+            target: "0x49827013C5a9ac04136BA5576b0dD56408DaEf34",
+            value: 0n,
+            data: "0x"
+        }])
+
+        const signature = await signer.signMessage({
+            message: {
+                raw: userOpHash,
+            }
         })
+        initWalletOp.signature = signature
+
+        const txHash = await handleUserOp(initWalletOp)
+        console.log(txHash)
+
+        // createWallet({
+        //     id: 0,
+        //     name: `Wallet 1`,
+        //     senderAddress: sender,
+        //     signerAddress: account.address
+        // })
     }
 
     const onCreateWallet = async () => {
         if (password != confirmPassword) {
             setAlert("password mismatch")
         } else {
-            const mnemonic = generateMnemonic(english)
+            // const mnemonic = generateMnemonic(english)
+            const mnemonic = "scorpion orbit dynamic moon cloth wall doll pottery struggle garbage paddle between" // for testing
 
             await initUserCredentials(mnemonic, password)
             await initWallet(mnemonic)
 
-            navigator("/home")
+            // navigator("/home")
         }
     }
 

@@ -1,5 +1,5 @@
 import { Hex } from "viem"
-import { decryptMnemonic } from "./encryption"
+import { decryptMnemonic } from "../utils/encryption"
 import { mnemonicToAccount } from "viem/accounts"
 
 export class Signer {

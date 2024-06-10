@@ -11,7 +11,7 @@ export const useUserStore = create<IUserStoreState>()(
             onSetCredentials: (credentials) => set({ credentials }),
         }),
         {
-            name: "useUserStore",
+            name: "userStore",
             storage: createJSONStorage(() => ExtensionStorageWrapper),
         }
     )
