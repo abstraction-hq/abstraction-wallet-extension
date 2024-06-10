@@ -5,7 +5,7 @@ import { english, generateMnemonic, mnemonicToAccount } from "viem/accounts"
 import { Account } from "~utils/account"
 import { encryptMnemonic, hashPassword } from "~utils/encryption"
 import { useUserStore, useWalletStore } from "~stores"
-import { createPublicClient, http, PublicClient } from "viem"
+import { concat, createPublicClient, http, PublicClient } from "viem"
 import { NETWORKS } from "~constants"
 import { handleUserOp } from "~utils/bundler"
 
@@ -55,25 +55,27 @@ const CreateView = () => {
                 raw: userOpHash,
             }
         })
-        initWalletOp.signature = signature
+        initWalletOp.signature = concat([
+            signer.address,
+            signature
+        ])
 
         const txHash = await handleUserOp(initWalletOp)
-        console.log(txHash)
 
-        // createWallet({
-        //     id: 0,
-        //     name: `Wallet 1`,
-        //     senderAddress: sender,
-        //     signerAddress: account.address
-        // })
+        createWallet({
+            id: 0,
+            name: `Wallet 1`,
+            senderAddress: sender,
+            signerAddress: account.address
+        })
     }
 
     const onCreateWallet = async () => {
         if (password != confirmPassword) {
             setAlert("password mismatch")
         } else {
-            // const mnemonic = generateMnemonic(english)
-            const mnemonic = "scorpion orbit dynamic moon cloth wall doll pottery struggle garbage paddle between" // for testing
+            const mnemonic = generateMnemonic(english)
+            // const mnemonic = "scorpion orbit dynamic moon cloth wall doll pottery struggle garbage paddle between" // for testing
 
             await initUserCredentials(mnemonic, password)
             await initWallet(mnemonic)
