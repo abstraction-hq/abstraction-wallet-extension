@@ -38,3 +38,14 @@ export interface CallContractArgs {
     value: bigint;
     data: Hex
 }
+
+
+export type IStoredWallet = {
+    index: number
+    address: Address
+}
+
+export interface IStoredMnemonic {
+    encryptedMnemonic: string
+    passwordHash: string
+}
