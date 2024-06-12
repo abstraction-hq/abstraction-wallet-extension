@@ -1,6 +1,7 @@
 import { Address } from "viem"
 import { useWalletStore } from "~stores"
 import browser from "webextension-polyfill";
+import { onMessage, sendMessage } from "webext-bridge/background";
 
 
 export default class EthNamespace {
@@ -23,13 +24,24 @@ export default class EthNamespace {
     }
 
     public sendTransaction = async (params: any): Promise<string> => {
-        const window = await browser.windows.create({
-            url: `${browser.runtime.getURL("popup.html")}`,
-            focused: true,
-            type: "popup",
-            width: 385,
-            height: 720
+        return new Promise(async (resolve, reject) => {
+            // const storeTransaction = useSignTransactionStore.getState().onSetTransaction
+            // await storeTransaction(params)
+            browser.windows.create({
+                url: `${browser.runtime.getURL("tabs/signTransaction.html")}`,
+                focused: true,
+                type: "popup",
+                width: 357,
+                height: 600
+            })
+
+            onMessage("ready-for-transaction", ({sender}) => {
+                sendMessage("signTransaction", params, `popup@${sender.tabId}`)
+            })
+
+            onMessage("signedTransaction", (data: any) => {
+                resolve(data)
+            })
         })
-        return "0x123456789"
     }
 }

@@ -2,7 +2,7 @@ import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
 import { IUserStoreState } from "~types/storages/types"
-import { ExtensionStorageWrapper } from "~utils/storage"
+import { ExtensionStorage, buildWrapper } from "~utils/storage"
 
 export const useUserStore = create<IUserStoreState>()(
     persist(
@@ -12,7 +12,7 @@ export const useUserStore = create<IUserStoreState>()(
         }),
         {
             name: "userStore",
-            storage: createJSONStorage(() => ExtensionStorageWrapper),
+            storage: createJSONStorage(() => buildWrapper(ExtensionStorage)),
         }
     )
 )
