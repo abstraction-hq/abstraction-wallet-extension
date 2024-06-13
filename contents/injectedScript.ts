@@ -1,3 +1,5 @@
+import logo from "url:../assets/logo.svg"
+
 interface IRequest {
     readonly method: string
     readonly params?: readonly unknown[] | object
@@ -46,26 +48,11 @@ interface EIP6963ProviderInfo {
     rdns: string
 }
 
-interface EIP6963ProviderDetail {
-    info: EIP6963ProviderInfo
-    provider: any
-}
-
-// Announce Event dispatched by a Wallet
-interface EIP6963AnnounceProviderEvent extends CustomEvent {
-    type: "eip6963:announceProvider"
-    detail: EIP6963ProviderDetail
-}
-
-interface EIP6963RequestProviderEvent extends Event {
-    type: "eip6963:requestProvider"
-}
-
 function announceProvider() {
     const info: EIP6963ProviderInfo = {
-        uuid: "350670db-19fa-4704-a166-e52e178b59d2",
+        uuid: Math.random().toString(36).substring(2),
         name: "Abstraction Wallet",
-        icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'/>",
+        icon: logo,
         rdns: "abstraction.world"
     }
     window.dispatchEvent(

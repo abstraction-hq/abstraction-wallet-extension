@@ -94,7 +94,8 @@ export default class EthNamespace {
                 focused: true,
                 type: "popup",
                 width: 357,
-                height: 600
+                height: 600,
+                
             })
 
             onMessage("ready-for-transaction", ({ sender }) => {
