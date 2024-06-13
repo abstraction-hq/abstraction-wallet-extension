@@ -1,12 +1,74 @@
-import { Address } from "viem"
-import { useWalletStore } from "~stores"
-import browser from "webextension-polyfill";
-import { onMessage, sendMessage } from "webext-bridge/background";
+import { Address, createPublicClient, http, PublicClient } from "viem"
+import { onMessage, sendMessage } from "webext-bridge/background"
+import browser from "webextension-polyfill"
 
+import { NETWORKS } from "~constants"
+import { useWalletStore } from "~stores"
+import { useConfigStore } from "~stores/configStore"
+import { ExtensionStorage } from "~utils/storage"
 
 export default class EthNamespace {
+    private ethClient: PublicClient
+    private events: any
+
+    constructor() {
+        const activeNetwork: string = useConfigStore.getState().activeNetwork
+        this.ethClient = createPublicClient({
+            chain: NETWORKS[activeNetwork],
+            transport: http()
+        }) as PublicClient
+
+        this._listenForNetworkChange()
+    }
+
+    private _listenForNetworkChange = () => {
+        ExtensionStorage.watch({
+            configStore: ({ oldValue, newValue }) => {
+                if (oldValue.activeNetwork !== newValue.activeNetwork) {
+                    this.switchChain(newValue.activeNetwork)
+                    this.emit("chainChanged", newValue.activeNetwork)
+                }
+            }
+        })
+    }
+
+    // Method to emit events
+    private emit = (event: string, data: any) => {
+        if (!this.events[event]) return
+
+        this.events[event].forEach((listener: any) => listener(data))
+    }
+
+    // Method to add event listeners
+    public on = (event: string, listener: any) => {
+        if (!this.events[event]) {
+            this.events[event] = []
+        }
+        this.events[event].push(listener)
+    }
+
+    // Method to remove event listeners
+    public removeListener = (event: string, listenerToRemove: any) => {
+        if (!this.events[event]) return
+
+        this.events[event] = this.events[event].filter(
+            (listener: any) => listener !== listenerToRemove
+        )
+    }
+
+    public switchChain = (network: string) => {
+        this.ethClient = createPublicClient({
+            chain: NETWORKS[network],
+            transport: http()
+        }) as PublicClient
+    }
+
     public chainId = async (): Promise<number> => {
-        return 1
+        return await this.ethClient.getChainId()
+    }
+
+    public blockNumber = async (): Promise<bigint> => {
+        return await this.ethClient.getBlockNumber()
     }
 
     public accounts = async (): Promise<Address[]> => {
@@ -35,11 +97,11 @@ export default class EthNamespace {
                 height: 600
             })
 
-            onMessage("ready-for-transaction", ({sender}) => {
+            onMessage("ready-for-transaction", ({ sender }) => {
                 sendMessage("signTransaction", params, `popup@${sender.tabId}`)
             })
 
-            onMessage("signedTransaction", (data: any) => {
+            onMessage("signedTransaction", ({ data }: any) => {
                 resolve(data)
             })
         })

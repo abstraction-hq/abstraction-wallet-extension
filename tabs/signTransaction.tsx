@@ -2,15 +2,17 @@ import React, { useEffect } from "react"
 import { onMessage, sendMessage } from "webext-bridge/popup"
 
 const SignTransaction = () => {
+    const [transaction, setTransaction] = React.useState<any>(null)
+
     useEffect(() => {
         onMessage("signTransaction", (data: any) => {
-            console.log(data)
+            setTransaction(data)
         })
         sendMessage("ready-for-transaction", null, "background")
     })
 
     const onConfirm = async () => {
-        sendMessage("signedTransaction", "sign-transaction", "background")
+        sendMessage("signedTransaction", "txHash", "background")
         window.close()
     }
 

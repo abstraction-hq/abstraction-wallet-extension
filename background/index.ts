@@ -1,16 +1,19 @@
 import { onMessage } from "webext-bridge/background"
 import EthNamespace from "~namespace/eth"
+import WalletNamespace from "~namespace/wallet"
 
-const eth = new EthNamespace()
+const ethNamespace = new EthNamespace()
+const walletNamespace = new WalletNamespace() 
 
 const modules: any = {
-    eth: eth
+    eth: ethNamespace,
+    wallet: walletNamespace
 }
 
 console.log("Background script running")
 
-onMessage("api_call", async (event) => {
-    const { data }: any = event
+onMessage("api_call", async ({data, sender}: any) => {
+    console.log(data)
     const baseResponse = {
         callID: data.callID,
         type: "response"

@@ -4,7 +4,6 @@ import LoginPage from '~views/login';
 import HomePage from '~views/home';
 import WelcomeView from '~views/welcome';
 import CreateView from '~views/create';
-import SignTransactionView from '~views/signTransaction';
 
 export const routers = createMemoryRouter([
     {
@@ -22,9 +21,5 @@ export const routers = createMemoryRouter([
     {
         path: "/create",
         Component: CreateView
-    },
-    {
-        path: "/sign-transaction",
-        Component: SignTransactionView
     },
 ])
