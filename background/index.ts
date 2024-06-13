@@ -13,7 +13,6 @@ const modules: any = {
 console.log("Background script running")
 
 onMessage("api_call", async ({data, sender}: any) => {
-    console.log(data)
     const baseResponse = {
         callID: data.callID,
         type: "response"

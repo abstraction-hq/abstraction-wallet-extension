@@ -5,6 +5,13 @@ interface IRequest {
     readonly params?: readonly unknown[] | object
 }
 
+interface EIP6963ProviderInfo {
+    uuid: string
+    name: string
+    icon: string
+    rdns: string
+}
+
 const AbstractionWallet: Record<string, any> = {
     walletName: "abstraction",
     isAbstraction: true,
@@ -38,16 +45,6 @@ const AbstractionWallet: Record<string, any> = {
     }
 }
 
-// @ts-ignore
-window.ethereum = AbstractionWallet
-
-interface EIP6963ProviderInfo {
-    uuid: string
-    name: string
-    icon: string
-    rdns: string
-}
-
 function announceProvider() {
     const info: EIP6963ProviderInfo = {
         uuid: Math.random().toString(36).substring(2),
@@ -68,3 +65,6 @@ window.addEventListener(
         announceProvider()
     }
 )
+
+// @ts-ignore
+window.ethereum = AbstractionWallet
