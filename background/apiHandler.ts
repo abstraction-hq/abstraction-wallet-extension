@@ -1,4 +1,6 @@
 import { createPublicClient, http, PublicClient } from "viem"
+import { onMessage } from "webext-bridge/background"
+import browser from "webextension-polyfill"
 import { NETWORKS } from "~constants"
 import { useWalletStore } from "~stores"
 import { useConfigStore } from "~stores/configStore"
@@ -54,18 +56,43 @@ export default class APIHandler {
     }
 
     private _switchAccount = (activeWallet: number) => {
-        const wallet = useWalletStore.getState().wallets.find((wallet) => wallet.id === activeWallet)
+        const wallet = useWalletStore
+            .getState()
+            .wallets.find((wallet) => wallet.id === activeWallet)
         if (!wallet) return
         this.account = new Account(wallet.signerAddress)
     }
 
-    private _requestPermissions = async (params: any) => {
-        return {
-            "parentCapability": "eth_accounts",
-        }
+    private _openTabs = async (url: string) => {
+        return await browser.windows.create({
+            url: `${browser.runtime.getURL(url)}`,
+            focused: true,
+            type: "popup",
+            width: 357,
+            height: 600
+        })
     }
 
-    private _handleMessage = async ({ method, params }: any): Promise<unknown> => {
+    private _requestPermissions = async (params: any) => {
+        return new Promise(async (resolve, reject) => {
+            const tab = await this._openTabs("tabs/connect.html")
+
+            onMessage("connect" ,( {data, sender} ) => {
+                if (data == "accept") {
+                    resolve([{
+                        parentCapability: "eth_accounts"
+                    }])
+                } else {
+                    reject("User denied the request")
+                }
+            })
+        })
+    }
+
+    private _handleMessage = async ({
+        method,
+        params
+    }: any): Promise<unknown> => {
         switch (method) {
             case "wallet_requestPermissions":
                 return this._requestPermissions(params)
