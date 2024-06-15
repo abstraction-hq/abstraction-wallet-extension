@@ -1,17 +1,17 @@
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
-import { IUserStoreState } from "~types/storages/types"
+import { IConfigStoreState } from "~types/storages/types"
 import { ExtensionStorage, buildWrapper } from "~utils/storage"
 
-export const useUserStore = create<IUserStoreState>()(
+export const useConfigStore = create<IConfigStoreState>()(
     persist(
         (set) => ({
-            credentials: undefined,
-            onSetCredentials: (credentials) => set({ credentials }),
+            activeNetwork: "testnet",
+            onSetActiveNetwork: (network: string) => set({ activeNetwork: network }),
         }),
         {
-            name: "userStore",
+            name: "configStore",
             storage: createJSONStorage(() => buildWrapper(ExtensionStorage)),
         }
     )

@@ -12,11 +12,9 @@ import { handleUserOp } from "~utils/bundler"
 const CreateView = () => {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
-    const wallets = useWalletStore((state) => state.wallets)
+    const [alert, setAlert] = useState<string>("")
     const setUserCredentials = useUserStore((state) => state.onSetCredentials)
     const createWallet = useWalletStore((state) => state.onCreateWallet)
-
-    const [alert, setAlert] = useState("")
 
     const navigator = useNavigate()
 
@@ -34,7 +32,7 @@ const CreateView = () => {
         })
     }
 
-    const initWallet = async (mnemonic: string) => {
+    const initWallet = async (mnemonic: string): Promise<boolean> => {
         const signer = mnemonicToAccount(mnemonic, { addressIndex: 0 })
         const account = new Account(signer.address)
         const sender = account.getSender()
@@ -62,12 +60,23 @@ const CreateView = () => {
 
         const txHash = await handleUserOp(initWalletOp)
 
-        createWallet({
-            id: 0,
-            name: `Wallet 1`,
-            senderAddress: sender,
-            signerAddress: account.address
+        const transaction = await ethClient.waitForTransactionReceipt({
+            hash: txHash
         })
+        const success = transaction.status == "success"
+
+        if (success) {
+            createWallet({
+                id: 0,
+                name: `Wallet 1`,
+                senderAddress: sender,
+                signerAddress: signer.address
+            })
+            return true
+        } else { 
+            setAlert("Failed to create wallet")
+            return false
+        }
     }
 
     const onCreateWallet = async () => {
@@ -75,12 +84,13 @@ const CreateView = () => {
             setAlert("password mismatch")
         } else {
             const mnemonic = generateMnemonic(english)
-            // const mnemonic = "scorpion orbit dynamic moon cloth wall doll pottery struggle garbage paddle between" // for testing
 
             await initUserCredentials(mnemonic, password)
-            await initWallet(mnemonic)
+            const success = await initWallet(mnemonic)
 
-            // navigator("/home")
+            if (success) {
+                navigator("/home")
+            }
         }
     }
 

@@ -24,7 +24,19 @@ export interface IUserStoreState {
     onSetCredentials: (credentials: IUserCredentials) => void;
 }
 
-export interface ICacheStoreState {
-    cachePassword?: string;
-    onInitCache: (password: string) => void;
+export interface IConfigStoreState {
+    activeNetwork: string
+    onSetActiveNetwork: (network: string) => void
+}
+
+export interface IDapp {
+    id: number
+    name: string
+    url: string
+    icon: string
+    description: string
+}
+
+export interface IDappStoreState {
+    dapps: Record<string, IDapp>
 }

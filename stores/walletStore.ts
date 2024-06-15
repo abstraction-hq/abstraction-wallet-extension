@@ -5,7 +5,7 @@ import {
 } from "zustand/middleware"
 
 import { IWallet, IWalletStoreState } from "~types/storages/types"
-import { ExtensionStorageWrapper } from "~utils/storage"
+import { ExtensionStorage, buildWrapper } from "~utils/storage"
 
 export const useWalletStore = create<IWalletStoreState>()(
     persist(
@@ -27,7 +27,7 @@ export const useWalletStore = create<IWalletStoreState>()(
         }),
         {
             name: "walletStore",
-            storage: createJSONStorage(() => ExtensionStorageWrapper)
+            storage: createJSONStorage(() => buildWrapper(ExtensionStorage))
         }
     )
 )
