@@ -5,6 +5,7 @@ import { NETWORKS } from "~constants"
 import { useWalletStore } from "~stores"
 import { useConfigStore } from "~stores/configStore"
 import { Account } from "~utils/account"
+import { getTab, getTabHostName, openTab } from "~utils/browser"
 import { ExtensionStorage } from "~utils/storage"
 
 export default class APIHandler {
@@ -63,21 +64,12 @@ export default class APIHandler {
         this.account = new Account(wallet.signerAddress)
     }
 
-    private _openTabs = async (url: string) => {
-        return await browser.windows.create({
-            url: `${browser.runtime.getURL(url)}`,
-            focused: true,
-            type: "popup",
-            width: 357,
-            height: 600
-        })
-    }
-
-    private _requestPermissions = async (dappUrl: string, params: any) => {
+    private _requestPermissions = async (dappHostName: string, params: any) => {
         return new Promise(async (resolve, reject) => {
-            const tab = await this._openTabs("tabs/connect.html")
+            const tab = await openTab("tabs/connect.html")
 
             onMessage("connect" ,( {data, sender} ) => {
+                console.log(sender, tab)
                 if (data == "accept") {
                     resolve([{
                         parentCapability: "eth_accounts"
@@ -89,18 +81,12 @@ export default class APIHandler {
         })
     }
 
-    private _getTab = async (tabId: number) => {
-        const tabs = await browser.tabs.query({ active: true, currentWindow: true })
-        return tabs.find((tab) => tab.id === tabId)
-    }
-
     private _handleMessage = async ({data, sender}: any): Promise<unknown> => {
-        const tab = await this._getTab(sender.tabId)
-        console.log(tab)
         const { method, params } = data
         switch (method) {
             case "wallet_requestPermissions":
-                return this._requestPermissions(sender, params)
+                const dappHostName = await getTabHostName(sender.tabId)
+                return this._requestPermissions(dappHostName, params)
             default:
                 return this.ethClient.request(method, params)
         }
