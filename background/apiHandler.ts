@@ -73,7 +73,7 @@ export default class APIHandler {
         })
     }
 
-    private _requestPermissions = async (params: any) => {
+    private _requestPermissions = async (dappUrl: string, params: any) => {
         return new Promise(async (resolve, reject) => {
             const tab = await this._openTabs("tabs/connect.html")
 
@@ -89,27 +89,32 @@ export default class APIHandler {
         })
     }
 
-    private _handleMessage = async ({
-        method,
-        params
-    }: any): Promise<unknown> => {
+    private _getTab = async (tabId: number) => {
+        const tabs = await browser.tabs.query({ active: true, currentWindow: true })
+        return tabs.find((tab) => tab.id === tabId)
+    }
+
+    private _handleMessage = async ({data, sender}: any): Promise<unknown> => {
+        const tab = await this._getTab(sender.tabId)
+        console.log(tab)
+        const { method, params } = data
         switch (method) {
             case "wallet_requestPermissions":
-                return this._requestPermissions(params)
+                return this._requestPermissions(sender, params)
             default:
                 return this.ethClient.request(method, params)
         }
     }
 
-    public handleApi = async ({ data }: any): Promise<unknown> => {
+    public handleApi = async (params: any): Promise<unknown> => {
         const baseResponse = {
-            callID: data.callID,
+            callID: params.data.callID,
             type: "response"
         }
 
         try {
             const res: any = await this._handleMessage({
-                ...data
+                ...params
             })
 
             return {
