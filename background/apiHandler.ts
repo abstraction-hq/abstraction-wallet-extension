@@ -1,26 +1,26 @@
-import { createPublicClient, http, PublicClient } from "viem"
+import { Address, createPublicClient, http, PublicClient, zeroAddress } from "viem"
 import { onMessage } from "webext-bridge/background"
-import browser from "webextension-polyfill"
 import { NETWORKS } from "~constants"
-import { useWalletStore } from "~stores"
-import { useConfigStore } from "~stores/configStore"
-import { Account } from "~utils/account"
-import { getTab, getTabHostName, openTab } from "~utils/browser"
+import { useWalletStore, useConfigStore, useDappStore } from "~stores"
+import { IDapp, IWallet } from "~types/storages/types"
+import { Permission } from "~types/permission/types"
+import { Account, calculateSenderAddress } from "~utils/account"
+import { getDappHostName, getDappInfo, openTab } from "~utils/browser"
 import { ExtensionStorage } from "~utils/storage"
 
 export default class APIHandler {
-    private ethClient: PublicClient
-    private account: Account | null
     private events: any
+    private account: Account
+    private ethClient: PublicClient
 
     constructor() {
-        const activeNetwork: string = useConfigStore.getState().activeNetwork
+        const activeWallet: IWallet = useWalletStore.getState().wallets[useWalletStore.getState().activeWallet]
+        this.account = new Account(activeWallet.signerAddress)
+        const activeNetwork = useConfigStore.getState().activeNetwork
         this.ethClient = createPublicClient({
             chain: NETWORKS[activeNetwork],
             transport: http()
         }) as PublicClient
-
-        this.account = null
 
         this._listenForStoreChange()
     }
@@ -64,31 +64,130 @@ export default class APIHandler {
         this.account = new Account(wallet.signerAddress)
     }
 
-    private _requestPermissions = async (dappHostName: string, params: any) => {
+    private _getPermissions = async (tabId: number): Promise<Permission[]> => {
         return new Promise(async (resolve, reject) => {
-            const tab = await openTab("tabs/connect.html")
+            const hostname: string = await getDappHostName(tabId)
+            const dappPermissions = useDappStore.getState().dappPermissions
+            const result: Permission[] = []
+            for (const permission of dappPermissions[hostname]) {
+                result.push({
+                    invoker: hostname,
+                    parentCapability: permission,
+                    caveats: []
+                })
+            }
 
-            onMessage("connect" ,( {data, sender} ) => {
-                console.log(sender, tab)
-                if (data == "accept") {
-                    resolve([{
-                        parentCapability: "eth_accounts"
-                    }])
-                } else {
-                    reject("User denied the request")
+            resolve(result)
+        })
+    }
+
+    private _requestAccounts = async (tabId: number): Promise<Address[]> => {
+        return new Promise(async (resolve, reject) => {
+            const permissions = await this._requestPermissions(tabId, [{
+                eth_accounts: {}
+            }])
+            for (const permission of permissions) {
+                if (permission.parentCapability === "eth_accounts") {
+                    const walletState = useWalletStore.getState()
+                    const activeWallet: IWallet = walletState.wallets[walletState.activeWallet]
+                    resolve([calculateSenderAddress(activeWallet.signerAddress)])
                 }
-            })
+            }
+        })
+    }
+
+    private _sendTransaction = async (tabId: number, params: any): Promise<string> => {
+        return new Promise(async (resolve, reject) => {
+            const permissions = await this._requestPermissions(tabId, [{
+                eth_accounts: {}
+            }])
+            for (const permission of permissions) {
+                if (permission.parentCapability === "eth_accounts") {
+                    const walletState = useWalletStore.getState()
+                    const activeWallet: IWallet = walletState.wallets[walletState.activeWallet]
+                    const activeNetwork = useConfigStore.getState().activeNetwork
+                    const ethClient = createPublicClient({
+                        chain: NETWORKS[activeNetwork],
+                        transport: http()
+                    }) as PublicClient
+
+                    resolve("Transaction sent")
+                }
+            }
+        })
+    }
+
+    private _requestPermissions = async (tabId: number, params: any): Promise<Permission[]> => {
+        return new Promise(async (resolve, reject) => {
+            const dappPermissions = useDappStore.getState().dappPermissions
+            const hostname: string = await getDappHostName(tabId)
+
+            const result: Permission[] = []
+            
+            if (params && "eth_accounts" in params[0] && dappPermissions[hostname]?.includes("eth_accounts")) {
+                result.push({
+                    invoker: hostname,
+                    parentCapability: "eth_accounts",
+                    caveats: []
+                })
+
+                resolve(result)
+                return
+            } else {
+                await openTab("tabs/connect.html")
+                const dappInfo: IDapp = await getDappInfo(tabId)
+
+                onMessage("requestDappInfo", ({sender}) => {
+                    return dappInfo
+                })
+
+                onMessage("connect" ,( {data, sender} ) => {
+                    if (data == "reject") {
+                        reject("User denied the request")
+                    }
+                    for (const permission of data as string[]) {
+                        result.push({
+                            invoker: dappInfo.hostname,
+                            parentCapability: permission,
+                            caveats: []
+                        })
+                    }
+
+                    resolve(result)
+                })
+
+            }
         })
     }
 
     private _handleMessage = async ({data, sender}: any): Promise<unknown> => {
         const { method, params } = data
         switch (method) {
+            case "eth_requestAccounts":
+                return this._requestAccounts(sender.tabId)
+            case "eth_accounts":
+                return this._requestAccounts(sender.tabId)
+            case "eth_sendTransaction": 
+                return this._sendTransaction(sender.tabId, params)
             case "wallet_requestPermissions":
-                const dappHostName = await getTabHostName(sender.tabId)
-                return this._requestPermissions(dappHostName, params)
+                return this._requestPermissions(sender.tabId, params)
+            case "wallet_getPermissions":
+                return this._getPermissions(sender.tabId)
             default:
-                return this.ethClient.request(method, params)
+                try {
+                    const activeNetwork = useConfigStore.getState().activeNetwork
+                    const ethClient = createPublicClient({
+                        chain: NETWORKS[activeNetwork],
+                        transport: http()
+                    }) as PublicClient
+
+                    return ethClient.request({
+                        method,
+                        params
+                    })
+                } catch (err: any) {
+                    throw(`Method ${method} not found. Details: ${err}`)
+                }
         }
     }
 
@@ -99,6 +198,8 @@ export default class APIHandler {
         }
 
         try {
+            console.log("Request", params.data.method)
+
             const res: any = await this._handleMessage({
                 ...params
             })

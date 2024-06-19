@@ -1,8 +1,4 @@
 import { onMessage } from "webext-bridge/background"
-import APIHandler from "./apiHandler"
+import { handleRequest } from "./handler"
 
-console.log("Background script running")
-
-const handler = new APIHandler()
-
-onMessage("api_call", handler.handleApi)
+onMessage("api_call", handleRequest)

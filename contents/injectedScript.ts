@@ -1,4 +1,6 @@
 import logo from "url:../assets/logo.svg"
+import { createPublicClient, http, PublicClient } from "viem"
+import { NETWORKS } from "~constants"
 
 interface IRequest {
     readonly method: string
@@ -68,3 +70,11 @@ window.addEventListener(
 
 // @ts-ignore
 window.ethereum = AbstractionWallet
+
+const ethClient = createPublicClient({
+    chain: NETWORKS["testnet"],
+    transport: http()
+}) as PublicClient
+
+// @ts-ignore
+window.client = ethClient

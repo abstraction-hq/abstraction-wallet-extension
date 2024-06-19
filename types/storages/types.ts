@@ -30,13 +30,14 @@ export interface IConfigStoreState {
 }
 
 export interface IDapp {
-    id: number
+    hostname: string
     name: string
-    url: string
     icon: string
-    description: string
 }
 
 export interface IDappStoreState {
-    dapps: Record<string, IDapp>
+    dappInfos: Record<string, IDapp>,
+    dappPermissions: Record<string, string[]>,
+    onAddPermission: (hostname: string, info: IDapp, permissions: string[]) => void
+    onRemovePermission: (hostname: string) => void
 }
