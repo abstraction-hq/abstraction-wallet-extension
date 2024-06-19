@@ -15,8 +15,6 @@ const HomePage: React.FC = () => {
     }, [activeWallet, credentials])
 
     const handleSendToken = async () => {
-        const randomNumber = Math.random();
-        await ExtensionStorage.set("testField", randomNumber);
     }
 
     return (
