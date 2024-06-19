@@ -1,13 +1,15 @@
 import React, { useEffect } from "react"
+import { PublicClient, createPublicClient, http } from "viem"
 import { sendMessage } from "webext-bridge/popup"
-import { useWalletStore } from "~stores"
-
-
-// TODO: handle transaction signing
+import { NETWORKS } from "~constants"
+import { useConfigStore, useWalletStore } from "~stores"
+import { Account } from "~utils/account"
+import { handleUserOp } from "~utils/bundler"
 
 const SignTransaction = () => {
     const [transaction, setTransaction] = React.useState<any>(null)
     const activeWallet: number = useWalletStore((state) => state.activeWallet)
+    const activeNetwork: string = useConfigStore((state) => state.activeNetwork)
     const wallets = useWalletStore((state) => state.wallets)
 
     useEffect(() => {
@@ -20,7 +22,33 @@ const SignTransaction = () => {
     }, [])
 
     const onConfirm = async () => {
-        sendMessage("signedTransaction", "txHash", "background")
+        const account = new Account(wallets[activeWallet]?.signerAddress)
+        
+        const ethClient = createPublicClient({
+            chain: NETWORKS[activeNetwork],
+            transport: http()
+        }) as PublicClient
+
+        const [userOp, userOpHash] = await account.sendTransactionOperation(ethClient, [{
+            target: transaction.to,
+            value: transaction.value,
+            data: transaction.data
+        }])
+
+        // TODO: sign transaction
+
+        const txHash = await handleUserOp(userOp)
+
+        sendMessage("signedTransaction", {
+            userOp: userOp,
+            userOpHash: userOpHash,
+            txHash: txHash
+        }, "background")
+        window.close()
+    }
+
+    const onReject = async () => {
+        sendMessage("signedTransaction", "reject", "background")
         window.close()
     }
 
@@ -41,6 +69,12 @@ const SignTransaction = () => {
                     <span className="font-semibold">Data:</span> {transaction?.value}
                 </div>
             </div>
+            <button
+                type="button"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={onReject}>
+                Reject
+            </button>
             <button
                 type="button"
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

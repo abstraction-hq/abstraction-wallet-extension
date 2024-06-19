@@ -231,20 +231,3 @@ export class Account {
         return this.buildUserOperation(client, callData)
     }
 }
-export const calculateSenderAddress = (signerAddress: Address): Address => {
-        const salt = keccak256(encodeAbiParameters(parseAbiParameters("address key"), [signerAddress]));
-        const initParameter = encodeAbiParameters(parseAbiParameters("address implement,bytes data"), [
-            WALLET_IMPLEMENT_ADDRESS,
-            encodeFunctionData({
-                abi: Wallet.abi,
-                functionName: "__Wallet_init",
-                args: [signerAddress]
-            })
-        ])
-        return getContractAddress({
-            bytecode: encodePacked(["bytes", "bytes"], [ERC1967ProxyCreationCode, initParameter]),
-            from: FACTORY_ADDRESS,
-            opcode: "CREATE2",
-            salt: salt
-        })
-}

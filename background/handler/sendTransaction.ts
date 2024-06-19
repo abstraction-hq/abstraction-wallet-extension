@@ -1,7 +1,5 @@
 import { Permission } from "~types/permission/types"
 import requestPermissions from "./requestPermissions"
-import { useWalletStore } from "~stores"
-import { IWallet } from "~types/storages/types"
 import { onMessage } from "webext-bridge/background"
 import { openTab } from "~utils/browser"
 
@@ -18,7 +16,10 @@ const sendTransaction = async (tabId: number, params: any) => {
                 onMessage("requestTransactionInfo", () => {
                     return params[0]
                 })
-                onMessage("signedTransaction", async (data) => {
+                onMessage("signedTransaction", async (data: any) => {
+                    if (data == "reject") {
+                        reject("User rejected transaction")
+                    }
                     resolve(data)
                 })
                 
