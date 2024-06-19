@@ -4,7 +4,7 @@ import { Permission } from "~types/permission/types"
 import { IDapp } from "~types/storages/types"
 import { getDappHostName, getDappInfo, openTab } from "~utils/browser"
 
-const requestPermissions = async (tabId: number, params: any) => {
+const requestPermissions = async (tabId: number, params: any): Promise<Permission[]> => {
     return new Promise(async (resolve, reject) => {
         const dappPermissions = useDappStore.getState().dappPermissions
         const hostname: string = await getDappHostName(tabId)

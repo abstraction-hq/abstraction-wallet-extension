@@ -1,6 +1,6 @@
 export interface Response {
     callID: string
-    type: "request" | "response",
+    type: "response",
     error?: boolean,
     message?: any
 }
