@@ -1,6 +1,6 @@
 import { Permission } from "~types/permission/types"
 import requestPermissions from "./requestPermissions"
-import { onMessage } from "webext-bridge/background"
+import { onMessage, sendMessage } from "webext-bridge/background"
 import { openWindow } from "~utils/browser"
 
 const sendTransaction = async (tabId: number, params: any) => {
