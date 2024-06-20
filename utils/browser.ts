@@ -3,7 +3,7 @@ import { IDapp } from "~types/storages/types"
 
 export const openWindow = async (tab: string) => {
     return await browser.windows.create({
-        url: `${browser.runtime.getURL(`popup.html#/${tab}`)}`,
+        url: `${browser.runtime.getURL(`tabs/${tab}.html`)}`,
         focused: true,
         type: "popup",
         width: 357,
@@ -13,7 +13,7 @@ export const openWindow = async (tab: string) => {
 
 export const openTab = async (tab: string) => {
     return await browser.tabs.create({
-        url: `${browser.runtime.getURL(`popup.html#/${tab}`)}`,
+        url: `${browser.runtime.getURL(`tabs/${tab}.html`)}`,
     })
 }
 
