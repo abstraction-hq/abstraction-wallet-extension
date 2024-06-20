@@ -6,6 +6,7 @@ import requestAccounts from "./requestAccounts"
 import requestPermissions from "./requestPermissions"
 import getPermissions from "./getPermissions"
 import sendTransaction from "./sendTransaction"
+import { openTab } from "~utils/browser"
 
 const handleRequest = async ({data, sender}: any): Promise<Response> => {
     const baseResponse: Response = {
@@ -64,6 +65,11 @@ const handleRequest = async ({data, sender}: any): Promise<Response> => {
     }
 }
 
+const onExtensionInstalled = async () => {
+    openTab("welcome")
+}
+
 export {
-    handleRequest
+    handleRequest,
+    onExtensionInstalled
 }

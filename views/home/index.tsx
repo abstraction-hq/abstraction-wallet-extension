@@ -1,8 +1,7 @@
 import React, { useEffect } from "react"
 import { useUserStore, useWalletStore } from "~stores"
-import { ExtensionStorage } from "~utils/storage"
 
-const HomePage: React.FC = () => {
+const HomeView: React.FC = () => {
     const activeWallet: number = useWalletStore((state) => state.activeWallet)
     const setActiveWallet = useWalletStore((state) => state.setActiveWallet)
     const wallets = useWalletStore((state) => state.wallets)
@@ -45,4 +44,4 @@ const HomePage: React.FC = () => {
     )
 }
 
-export default HomePage
+export default HomeView

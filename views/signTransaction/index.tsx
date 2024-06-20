@@ -2,8 +2,7 @@ import React, { useEffect } from "react"
 import { sendMessage } from "webext-bridge/popup"
 import { useWalletStore } from "~stores"
 
-
-// TODO: handle transaction signing
+import "~style.css"
 
 const SignTransaction = () => {
     const [transaction, setTransaction] = React.useState<any>(null)
@@ -20,7 +19,7 @@ const SignTransaction = () => {
     }, [])
 
     const onConfirm = async () => {
-        sendMessage("signedTransaction", "txHash", "background")
+        sendMessage("signTransactionResult", "txHash", "background")
         window.close()
     }
 

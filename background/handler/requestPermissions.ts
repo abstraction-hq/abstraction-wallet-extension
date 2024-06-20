@@ -2,7 +2,7 @@ import { onMessage } from "webext-bridge/background"
 import { useDappStore } from "~stores"
 import { Permission } from "~types/permission/types"
 import { IDapp } from "~types/storages/types"
-import { getDappHostName, getDappInfo, openTab } from "~utils/browser"
+import { getDappHostName, getDappInfo, openWindow } from "~utils/browser"
 
 const requestPermissions = async (tabId: number, params: any): Promise<Permission[]> => {
     return new Promise(async (resolve, reject) => {
@@ -25,7 +25,7 @@ const requestPermissions = async (tabId: number, params: any): Promise<Permissio
             resolve(result)
             return
         } else {
-            await openTab("tabs/connect.html")
+            await openWindow("connect")
             const dappInfo: IDapp = await getDappInfo(tabId)
 
             onMessage("requestDappInfo", ({ sender }) => {

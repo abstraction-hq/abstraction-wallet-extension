@@ -5,9 +5,9 @@ import Auth from "~components/auth"
 import { useDappStore } from "~stores/dappStore"
 import { IDapp } from "~types/storages/types"
 
-import "../style.css"
+import "~style.css"
 
-const Connect = () => {
+const ConnectView = () => {
     const addDappPermission = useDappStore((state) => state.onAddPermission)
     const [dappInfo, setDappInfo] = useState<IDapp>({
         hostname: "",
@@ -54,4 +54,4 @@ const Connect = () => {
     )
 }
 
-export default Connect
+export default ConnectView

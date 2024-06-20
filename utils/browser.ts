@@ -1,13 +1,19 @@
 import browser from "webextension-polyfill"
 import { IDapp } from "~types/storages/types"
 
-export const openTab = async (url: string) => {
+export const openWindow = async (tab: string) => {
     return await browser.windows.create({
-        url: `${browser.runtime.getURL(url)}`,
+        url: `${browser.runtime.getURL(`tabs/${tab}.html`)}`,
         focused: true,
         type: "popup",
         width: 357,
         height: 600
+    })
+}
+
+export const openTab = async (tab: string) => {
+    return await browser.tabs.create({
+        url: `${browser.runtime.getURL(`tabs/${tab}.html`)}`,
     })
 }
 
