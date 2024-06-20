@@ -36,6 +36,8 @@ const AbstractionWallet: Record<string, any> = {
                 if (res.callID !== data.callID) return
                 if (res.type !== "response") return
 
+                console.log("handle request", method, "return value", event.data)
+
                 window.removeEventListener("message", callback)
 
                 if (event.data.error) {
@@ -70,11 +72,3 @@ window.addEventListener(
 
 // @ts-ignore
 window.ethereum = AbstractionWallet
-
-const ethClient = createPublicClient({
-    chain: NETWORKS["testnet"],
-    transport: http()
-}) as PublicClient
-
-// @ts-ignore
-window.client = ethClient
