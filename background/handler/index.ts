@@ -1,13 +1,17 @@
 import { createPublicClient, http } from "viem"
 import { NETWORKS } from "~constants"
-import { useConfigStore } from "~stores"
+import { useConfigStore, useUserStore } from "~stores"
 import { Response } from "~types/message/types"
 import requestAccounts from "./requestAccounts"
 import requestPermissions from "./requestPermissions"
 import getPermissions from "./getPermissions"
 import sendTransaction from "./sendTransaction"
+import { openTab } from "~utils/browser"
+import { getStore } from "~utils/storage"
 
 const handleRequest = async ({data, sender}: any): Promise<Response> => {
+    const userStore = await getStore("userStore")
+    
     const baseResponse: Response = {
         callID: data.callID,
         type: "response"
@@ -64,6 +68,14 @@ const handleRequest = async ({data, sender}: any): Promise<Response> => {
     }
 }
 
+const onExtensionInstalled = async () => {
+    const userStore = await getStore("userStore")
+    if (!userStore.credentials) {
+        openTab("welcome")
+    }
+}
+
 export {
-    handleRequest
+    handleRequest,
+    onExtensionInstalled
 }

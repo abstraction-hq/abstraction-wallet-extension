@@ -1,9 +1,7 @@
 import { Permission } from "~types/permission/types"
 import requestPermissions from "./requestPermissions"
-import { useWalletStore } from "~stores"
-import { IWallet } from "~types/storages/types"
-import { onMessage } from "webext-bridge/background"
-import { openTab } from "~utils/browser"
+import { onMessage, sendMessage } from "webext-bridge/background"
+import { openWindow } from "~utils/browser"
 
 const sendTransaction = async (tabId: number, params: any) => {
     return new Promise(async (resolve, reject) => {
@@ -14,12 +12,16 @@ const sendTransaction = async (tabId: number, params: any) => {
         ])
         for (const permission of permissions) {
             if (permission.parentCapability === "eth_accounts") {
-                await openTab("tabs/signTransaction.html")
+                await openWindow("signTransaction")
                 onMessage("requestTransactionInfo", () => {
                     return params[0]
                 })
-                onMessage("signedTransaction", async (data) => {
-                    resolve(data)
+                onMessage("signTransactionResult", async (data: any) => {
+                    if (data == "reject") {
+                        reject("Transaction rejected")
+                    } else {
+                        resolve(data)
+                    }
                 })
                 
                 return

@@ -1,6 +1,6 @@
 import { Permission } from "~types/permission/types"
 import requestPermissions from "./requestPermissions"
-import { useWalletStore } from "~stores"
+import { getStore } from "~utils/storage"
 import { IWallet } from "~types/storages/types"
 
 const requestAccounts = async (tabId: number) => {
@@ -12,10 +12,9 @@ const requestAccounts = async (tabId: number) => {
         ])
         for (const permission of permissions) {
             if (permission.parentCapability === "eth_accounts") {
-                const walletState = useWalletStore.getState()
-                const activeWallet: IWallet =
-                    walletState.wallets[walletState.activeWallet]
-                resolve(activeWallet.senderAddress)
+                const walletStore = await getStore("walletStore")
+                const activeWallet: IWallet = walletStore.wallets[walletStore.activeWallet]
+                resolve([activeWallet.senderAddress])
             }
         }
 

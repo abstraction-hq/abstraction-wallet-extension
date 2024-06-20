@@ -1,6 +1,6 @@
 import { PlasmoCSConfig } from "plasmo"
 import injectedScript from "url:./injectedScript"
-import { sendMessage } from "webext-bridge/content-script"
+import { onMessage, sendMessage } from "webext-bridge/content-script"
 
 export const config: PlasmoCSConfig = {
     matches: ["file://*/*", "http://*/*", "https://*/*"],
@@ -20,11 +20,11 @@ container.removeChild(script)
 
 window.addEventListener("message", async ({ data }: any) => {
     // verify that the call has an ID
+    if (data.type === "response" || data.type === "event") {
+        return
+    }
     if (!data.callID) {
         throw new Error("The call does not have a callID")
-    }
-    if (data.type === "response") {
-        return
     }
 
     // send call to the background
@@ -35,5 +35,15 @@ window.addEventListener("message", async ({ data }: any) => {
     )
 
     // send the response to the injected script
+    window.postMessage(res, window.location.origin)
+})
+
+onMessage("accountsChanged", async (data: any) => {
+    const res = {
+        type: "event",
+        event: "accountsChanged",
+        message: data
+    }
+
     window.postMessage(res, window.location.origin)
 })

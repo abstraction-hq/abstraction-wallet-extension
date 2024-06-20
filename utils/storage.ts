@@ -16,3 +16,7 @@ export const buildWrapper = (storage: Storage) => {
         }
     }
 }
+
+export const getStore = async (storeName: string) => {
+    return JSON.parse(await ExtensionStorage.get(storeName) || "").state
+}

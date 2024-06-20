@@ -2,10 +2,7 @@ import React, { useEffect } from "react"
 import { sendMessage } from "webext-bridge/popup"
 import { useWalletStore } from "~stores"
 
-
-// TODO: handle transaction signing
-
-const SignTransaction = () => {
+const SignTransactionView = () => {
     const [transaction, setTransaction] = React.useState<any>(null)
     const activeWallet: number = useWalletStore((state) => state.activeWallet)
     const wallets = useWalletStore((state) => state.wallets)
@@ -20,13 +17,13 @@ const SignTransaction = () => {
     }, [])
 
     const onConfirm = async () => {
-        sendMessage("signedTransaction", "txHash", "background")
+        sendMessage("signTransactionResult", "txHash", "background")
         window.close()
     }
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <div className="bg-gray-100 border border-gray-200 p-4 rounded">
+            <div className="">
                 <h1 className="text-xl font-bold">Transaction Details</h1>
                 <div className="py-2">
                     <span className="font-semibold">From:</span> {wallets[activeWallet]?.senderAddress}
@@ -38,7 +35,7 @@ const SignTransaction = () => {
                     <span className="font-semibold">Value:</span> {transaction?.value}
                 </div>
                 <div className="py-2">
-                    <span className="font-semibold">Data:</span> {transaction?.value}
+                    <span className="font-semibold">Data:</span> {transaction?.data}
                 </div>
             </div>
             <button
@@ -51,4 +48,4 @@ const SignTransaction = () => {
     )
 }
 
-export default SignTransaction
+export default SignTransactionView

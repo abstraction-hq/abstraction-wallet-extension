@@ -27,14 +27,17 @@ const AbstractionWallet: Record<string, any> = {
                 type: "request",
                 callID: Math.random().toString(36).substring(2)
             }
+
             window.postMessage(data, window.location.origin)
 
             window.addEventListener("message", callback)
 
             async function callback(event: any) {
                 const { data: res } = event
-                if (res.callID !== data.callID) return
                 if (res.type !== "response") return
+                if (res.callID !== data.callID) return
+
+                console.log("handle request", method, "return value", event.data)
 
                 window.removeEventListener("message", callback)
 
@@ -42,6 +45,15 @@ const AbstractionWallet: Record<string, any> = {
                     return reject(event.data.message)
                 }
                 return resolve(event.data.message)
+            }
+        })
+    },
+    on: (method: string, callback: Function) => {
+        console.log("on", method)
+        window.addEventListener("message", (event: any) => {
+            const { data: res } = event
+            if (res.type === "event" && res.event === method) {
+                callback(res.message)
             }
         })
     }
@@ -70,11 +82,3 @@ window.addEventListener(
 
 // @ts-ignore
 window.ethereum = AbstractionWallet
-
-const ethClient = createPublicClient({
-    chain: NETWORKS["testnet"],
-    transport: http()
-}) as PublicClient
-
-// @ts-ignore
-window.client = ethClient
