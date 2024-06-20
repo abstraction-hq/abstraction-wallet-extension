@@ -2,6 +2,8 @@ import React, { useEffect } from "react"
 import { sendMessage } from "webext-bridge/popup"
 import { useWalletStore } from "~stores"
 
+import "~style.css"
+
 const SignTransactionView = () => {
     const [transaction, setTransaction] = React.useState<any>(null)
     const activeWallet: number = useWalletStore((state) => state.activeWallet)
