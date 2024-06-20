@@ -1,31 +1,15 @@
-import React, { useState } from "react"
-import { useAuthStore, useUserStore } from "~stores"
-import { hashPassword } from "~utils/encryption"
+import React, { useEffect, useState } from "react"
+import { useFetcher, useNavigate } from "react-router-dom"
 
-const Auth = ({children}: any) => {
+import { useWalletStore } from "~stores/walletStore"
+
+const LoginView = () => {
     const [password, setPassword] = useState<string>("")
     const [alert, setAlert] = useState<string>("")
-    const isUnlocked = useAuthStore((state) => state.isUnlocked)
-    const unlock = useAuthStore((state) => state.onUnlock)
-    const credentials = useUserStore((state) => state.credentials)
+    const navigator = useNavigate()
 
     const onLogin = async () => {
-        if (password.length === 0) {
-            setAlert("Password is required")
-            return
-        } 
 
-        const passwordHash = hashPassword(password)
-        if (passwordHash != credentials?.password) {
-            setAlert("Password is incorrect")
-            return
-        }
-
-        unlock(password)
-    }
-
-    if (isUnlocked) {
-        return <>{children}</>
     }
 
     return (
@@ -67,4 +51,4 @@ const Auth = ({children}: any) => {
     )
 }
 
-export default Auth
+export default LoginView
