@@ -1,5 +1,6 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useAuthStore, useUserStore } from "~stores"
+import { openTab } from "~utils/browser"
 import { hashPassword } from "~utils/encryption"
 
 const Auth = ({children}: any) => {
@@ -8,6 +9,13 @@ const Auth = ({children}: any) => {
     const isUnlocked = useAuthStore((state) => state.isUnlocked)
     const unlock = useAuthStore((state) => state.onUnlock)
     const credentials = useUserStore((state) => state.credentials)
+
+    useEffect(() => {
+        if (!credentials) {
+            openTab("welcome")
+            window.close()
+        }
+    }, [])
 
     const onLogin = async () => {
         if (password.length === 0) {

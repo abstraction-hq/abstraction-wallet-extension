@@ -1,6 +1,6 @@
 import { createPublicClient, http } from "viem"
 import { NETWORKS } from "~constants"
-import { useConfigStore } from "~stores"
+import { useConfigStore, useUserStore } from "~stores"
 import { Response } from "~types/message/types"
 import requestAccounts from "./requestAccounts"
 import requestPermissions from "./requestPermissions"
@@ -66,7 +66,10 @@ const handleRequest = async ({data, sender}: any): Promise<Response> => {
 }
 
 const onExtensionInstalled = async () => {
-    openTab("welcome")
+    const credentials = useUserStore.getState().credentials
+    if (!credentials) {
+        openTab("welcome")
+    }
 }
 
 export {

@@ -1,41 +1,47 @@
 import React, { useEffect } from "react"
 import { HashRouter, Route, Routes } from "react-router-dom"
+
 import Auth from "~components/auth"
-import HomeView from "~views/home"
 import ConnectView from "~views/connect"
-import WelcomeView from "~views/welcome"
 import CreateView from "~views/create"
-import { useUserStore } from "~stores"
-import { openTab } from "~utils/browser"
+import HomeView from "~views/home"
 
 import "~popup.css"
 import "~style.css"
 
+import SignTransactionView from "~views/signTransaction"
+import WelcomeView from "~views/welcome"
+
 function IndexPopup() {
-    const credentials = useUserStore(state => state.credentials)
-
-    useEffect(() => {
-        if (!credentials) {
-            openTab("welcome")
-            window.close()
-        }
-    }, [])
-
     return (
         <HashRouter>
             <Routes>
-                <Route path="/" element={
-                    <Auth>
-                        <HomeView />
-                    </Auth>
-                } />
-                <Route path="/connect" element={
-                    <Auth>
-                        <ConnectView />
-                    </Auth>
-                } />
+                <Route
+                    path="/"
+                    element={
+                        <Auth>
+                            <HomeView />
+                        </Auth>
+                    }
+                />
+                <Route
+                    path="/connect"
+                    element={
+                        <Auth>
+                            <ConnectView />
+                        </Auth>
+                    }
+                />
                 <Route path="/welcome" element={<WelcomeView />} />
                 <Route path="/create" element={<CreateView />} />
+                <Route
+                    path="/signTransaction"
+                    element={
+                        <Auth>
+                            <SignTransactionView />
+                        </Auth>
+                    }
+                />
             </Routes>
         </HashRouter>
     )

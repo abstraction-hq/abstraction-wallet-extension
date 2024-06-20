@@ -89,7 +89,7 @@ const CreateView = () => {
             const success = await initWallet(mnemonic)
 
             if (success) {
-                navigator("/home")
+                navigator("/")
             }
         }
     }
