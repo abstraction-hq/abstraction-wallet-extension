@@ -9,13 +9,14 @@ const Auth = ({children}: any) => {
     const isUnlocked = useAuthStore((state) => state.isUnlocked)
     const unlock = useAuthStore((state) => state.onUnlock)
     const credentials = useUserStore((state) => state.credentials)
-
+    
     useEffect(() => {
-        if (!credentials) {
-            openTab("welcome")
+        console.log(credentials)
+        if (useUserStore.persist.hasHydrated() && !credentials) {
+            openTab("welcome.html")
             window.close()
         }
-    }, [])
+    }, [credentials])
 
     const onLogin = async () => {
         if (password.length === 0) {

@@ -27,6 +27,8 @@ const AbstractionWallet: Record<string, any> = {
                 type: "request",
                 callID: Math.random().toString(36).substring(2)
             }
+
+            console.log(method, params)
             window.postMessage(data, window.location.origin)
 
             window.addEventListener("message", callback)

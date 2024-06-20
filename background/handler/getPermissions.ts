@@ -1,11 +1,12 @@
-import { useDappStore } from "~stores"
+import { getStore } from "~utils/storage"
 import { Permission } from "~types/permission/types"
 import { getDappHostName } from "~utils/browser"
 
 const getPermissions = async (tabId: number): Promise<Permission[]> => {
     return new Promise(async (resolve, reject) => {
         const hostname: string = await getDappHostName(tabId)
-        const dappPermissions = useDappStore.getState().dappPermissions
+        const dappStore = await getStore("dappStore")
+        const dappPermissions = dappStore.dappPermissions
         const result: Permission[] = []
         for (const permission of dappPermissions[hostname]) {
             result.push({

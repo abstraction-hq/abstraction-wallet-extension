@@ -35,7 +35,7 @@ const SignTransactionView = () => {
                     <span className="font-semibold">Value:</span> {transaction?.value}
                 </div>
                 <div className="py-2">
-                    <span className="font-semibold">Data:</span> {transaction?.value}
+                    <span className="font-semibold">Data:</span> {transaction?.data}
                 </div>
             </div>
             <button
